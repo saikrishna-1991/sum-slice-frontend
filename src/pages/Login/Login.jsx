@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card"
 import { Link, useNavigate } from "react-router-dom"
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("")
+    const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const navigate = useNavigate()
@@ -26,22 +26,20 @@ export default function LoginPage() {
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
             <Card className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-xl">
                 <div className="flex justify-center">
-                    <div className="grid grid-cols-3 gap-0.5 text-green-700">
-                        {[...Array(9)].map((_, i) => (
-                            <div key={i} className="w-3 h-3 bg-current" />
-                        ))}
+                    <div className="flex justify-center">
+                        <img src="./sum-slice-logo.png" alt="Logo" />
                     </div>
                 </div>
                 <h2 className="text-3xl font-bold text-center text-green-700">Welcome Back</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="userName">User Name</Label>
                         <Input
-                            id="email"
-                            type="email"
-                            placeholder="Enter your email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            id="userName"
+                            type="text"
+                            placeholder="Enter your username"
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
                             required
                         />
                     </div>
@@ -77,15 +75,8 @@ export default function LoginPage() {
                     <Link to="/forgot-password" className="text-sm text-green-700 hover:underline">
                         Forgot your password?
                     </Link>
-                    <div className="text-sm">
-                        Don't have an account?{" "}
-                        <Link to="/signup" className="text-green-700 hover:underline">
-                            Sign up
-                        </Link>
-                    </div>
                 </div>
             </Card>
         </div>
     )
 }
-

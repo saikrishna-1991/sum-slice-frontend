@@ -21,10 +21,8 @@ export default function ForgotPassword() {
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
             <Card className="w-full max-w-md p-8 space-y-6 bg-white shadow-lg rounded-xl">
                 <div className="flex justify-center">
-                    <div className="grid grid-cols-3 gap-0.5 text-green-700">
-                        {[...Array(9)].map((_, i) => (
-                            <div key={i} className="w-3 h-3 bg-current" />
-                        ))}
+                    <div className="flex justify-center ">
+                        <img src="./sum-slice-logo.png" />
                     </div>
                 </div>
                 <h2 className="text-3xl font-bold text-center text-green-700">Reset Password</h2>
@@ -50,7 +48,7 @@ export default function ForgotPassword() {
                 )}
                 <div className="text-center text-sm">
                     Remember your password?{" "}
-                    <Link to="/login" className="text-green-700 hover:underline">
+                    <Link to="/" className="text-green-700 hover:underline">
                         Log in
                     </Link>
                 </div>

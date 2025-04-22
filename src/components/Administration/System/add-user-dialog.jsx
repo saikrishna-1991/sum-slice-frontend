@@ -96,7 +96,6 @@ export function AddUserDialog({ open, onOpenChange }) {
                                         onClick={() => onOpenChange(false)}
                                         className="rounded-full p-1 hover:bg-gray-100 focus:outline-none"
                                     >
-                                        <X className="h-5 w-5" />
                                     </button>
                                 </div>
                             </div>
