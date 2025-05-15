@@ -10,24 +10,33 @@ import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
 
 export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
     const { toast } = useToast()
-    const [isEditing, setIsEditing] = useState(false)
+    const [isEditing, setIsEditing] = useState(isEditMode)
     const [activeTab, setActiveTab] = useState("personal")
     const [profileImage, setProfileImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
 
-    // Create a form state with all user data
+    // Initialize formData with the flat userData structure, mapping fields appropriately
     const [formData, setFormData] = useState({
-        ...user,
-        personalInfo: { ...user.personalInfo },
-        accountInfo: { ...user.accountInfo },
-        workFields: { ...user.workFields },
-        customInfo: { ...user.customInfo },
-        services: { ...user.services },
+        id: user?.id || "",
+        user_name: user?.user_name || "",
+        first_name: user?.first_name || "",
+        last_name: user?.last_name || "",
+        email: user?.email || "",
+        role_type: user?.role_type || "",
+        active: user?.active || false,
+        phone: user?.phone || "",
+        activation_date: user?.activation_date || "",
+        creation_date: user?.creation_date || "",
+        created_by: user?.created_by || "",
+        last_updated_by: user?.last_updated_by || "",
+        last_update_date: user?.last_update_date || ""
     })
+
+    // Derive fullName for display
+    const fullName = `${formData.first_name} ${formData.last_name}`.trim()
 
     const copyToClipboard = (text, label) => {
         navigator.clipboard.writeText(text)
@@ -39,53 +48,47 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
 
     const handleEditToggle = () => {
         if (isEditing) {
-            // If we're currently editing, this acts as a cancel button
-            setIsEditing(false)
-            // Reset form data to original user data
+            // Reset form data to original user data when canceling
             setFormData({
-                ...user,
-                personalInfo: { ...user.personalInfo },
-                accountInfo: { ...user.accountInfo },
-                workFields: { ...user.workFields },
-                customInfo: { ...user.customInfo },
-                services: { ...user.services },
+                id: user?.id || "",
+                user_name: user?.user_name || "",
+                first_name: user?.first_name || "",
+                last_name: user?.last_name || "",
+                email: user?.email || "",
+                role_type: user?.role_type || "",
+                active: user?.active || false,
+                phone: user?.phone || "",
+                activation_date: user?.activation_date || "",
+                creation_date: user?.creation_date || "",
+                created_by: user?.created_by || "",
+                last_updated_by: user?.last_updated_by || "",
+                last_update_date: user?.last_update_date || ""
             })
             setImagePreview(null)
             setProfileImage(null)
+            setIsEditing(false)
         } else {
-            // Start editing
             setIsEditing(true)
         }
     }
+
+    // Update isEditing when isEditMode changes
     useEffect(() => {
-        setIsEditing(true)
+        setIsEditing(isEditMode)
     }, [isEditMode])
-    const handleInputChange = (e, section = null) => {
+
+    const handleInputChange = (e) => {
         const { name, value } = e.target
-
-        if (section) {
-            setFormData((prev) => ({
-                ...prev,
-                [section]: {
-                    ...prev[section],
-                    [name]: value,
-                },
-            }))
-        } else {
-            setFormData((prev) => ({
-                ...prev,
-                [name]: value,
-            }))
-        }
-    }
-
-    const handleServiceToggle = (service, value) => {
         setFormData((prev) => ({
             ...prev,
-            services: {
-                ...prev.services,
-                [service]: value ? "Enabled" : "Disabled",
-            },
+            [name]: value
+        }))
+    }
+
+    const handleSelectChange = (name, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
         }))
     }
 
@@ -102,22 +105,20 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
     }
 
     const handleSave = () => {
-        // Here you would typically send the updated data to your API
+        // Log or send updated data to an API
         console.log("Saving user data:", formData)
         console.log("Profile image:", profileImage)
 
-        // Show success toast
         toast({
             title: "Profile Updated",
             description: "User profile has been updated successfully.",
         })
 
-        // Exit edit mode
         setIsEditing(false)
     }
 
-    // Render form fields or read-only data based on edit mode
-    const renderField = (label, value, name, section = null, type = "text") => {
+    // Render form fields or read-only data
+    const renderField = (label, value, name, type = "text") => {
         return (
             <div className="space-y-1">
                 <label className="text-sm text-gray-500">{label}</label>
@@ -125,8 +126,8 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                     <Input
                         type={type}
                         name={name}
-                        value={section ? formData[section]?.[name] || "" : formData[name] || ""}
-                        onChange={(e) => handleInputChange(e, section)}
+                        value={formData[name] || ""}
+                        onChange={handleInputChange}
                         className="h-8 text-sm min-h-[24px]"
                     />
                 ) : (
@@ -141,9 +142,10 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
             open={open}
             onOpenChange={(newOpen) => {
                 if (!newOpen && isEditing) {
-                    // Confirm before closing if in edit mode
                     if (window.confirm("You have unsaved changes. Are you sure you want to close?")) {
                         setIsEditing(false)
+                        setImagePreview(null)
+                        setProfileImage(null)
                         onOpenChange(false)
                     }
                 } else {
@@ -155,7 +157,7 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="flex justify-between items-center p-4 border-b">
                         <h2 className="text-lg font-medium">
-                            {formData.fullName} ({formData.email})
+                            {fullName} ({formData.email})
                         </h2>
                         <div className="flex items-center gap-2">
                             {isEditing ? (
@@ -202,10 +204,10 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                     <div className="relative">
                                         <Avatar className="h-24 w-24">
                                             {imagePreview ? (
-                                                <AvatarImage src={imagePreview || "/placeholder.svg"} />
+                                                <AvatarImage src={imagePreview} />
                                             ) : (
                                                 <AvatarFallback className="text-2xl bg-gray-300">
-                                                    {formData.fullName
+                                                    {fullName
                                                         .split(" ")
                                                         .map((n) => n[0])
                                                         .join("")}
@@ -231,21 +233,31 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                     </div>
                                     <div className="text-center">
                                         {isEditing ? (
-                                            <Input
-                                                value={formData.fullName}
-                                                name="fullName"
-                                                onChange={(e) => handleInputChange(e)}
-                                                className="text-center font-medium h-6 min-h-[24px]"
-                                            />
+                                            <div className="space-y-2">
+                                                <Input
+                                                    value={formData.first_name}
+                                                    name="first_name"
+                                                    onChange={handleInputChange}
+                                                    className="text-center font-medium h-6 min-h-[24px]"
+                                                    placeholder="First Name"
+                                                />
+                                                <Input
+                                                    value={formData.last_name}
+                                                    name="last_name"
+                                                    onChange={handleInputChange}
+                                                    className="text-center font-medium h-6 min-h-[24px]"
+                                                    placeholder="Last Name"
+                                                />
+                                            </div>
                                         ) : (
-                                            <h3 className="font-medium">{formData.fullName}</h3>
+                                            <h3 className="font-medium">{fullName}</h3>
                                         )}
-                                        <div className="flex items-center text-sm text-gray-500">
+                                        <div className="flex items-center justify-center text-sm text-gray-500">
                                             {isEditing ? (
                                                 <Input
                                                     value={formData.email}
                                                     name="email"
-                                                    onChange={(e) => handleInputChange(e)}
+                                                    onChange={handleInputChange}
                                                     className="text-center h-6 min-h-[24px]"
                                                 />
                                             ) : (
@@ -268,8 +280,8 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                         <span className="text-sm font-medium w-32">Role</span>
                                         {isEditing ? (
                                             <Select
-                                                value={formData.role}
-                                                onValueChange={(value) => setFormData((prev) => ({ ...prev, role: value }))}
+                                                value={formData.role_type}
+                                                onValueChange={(value) => handleSelectChange("role_type", value)}
                                             >
                                                 <SelectTrigger className="w-[180px] h-8 min-h-[24px]">
                                                     <SelectValue placeholder="Select role" />
@@ -282,23 +294,16 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                                 </SelectContent>
                                             </Select>
                                         ) : (
-                                            <Badge variant="outline">{formData.role}</Badge>
+                                            <Badge variant="outline">{formData.role_type}</Badge>
                                         )}
-                                    </div>
-
-                                    <div className="flex items-center">
-                                        <span className="text-sm font-medium w-32">Used Storage</span>
-                                        <span className="text-sm">
-                                            {formData.storage?.used} / {formData.storage?.total}
-                                        </span>
                                     </div>
 
                                     <div className="flex items-center">
                                         <span className="text-sm font-medium w-32">Status</span>
                                         {isEditing ? (
                                             <Select
-                                                value={formData.status}
-                                                onValueChange={(value) => setFormData((prev) => ({ ...prev, status: value }))}
+                                                value={formData.active ? "Active" : "Inactive"}
+                                                onValueChange={(value) => handleSelectChange("active", value === "Active")}
                                             >
                                                 <SelectTrigger className="w-[180px] h-8 min-h-[24px]">
                                                     <SelectValue placeholder="Select status" />
@@ -306,62 +311,15 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                                 <SelectContent>
                                                     <SelectItem value="Active">Active</SelectItem>
                                                     <SelectItem value="Inactive">Inactive</SelectItem>
-                                                    <SelectItem value="Blocked">Blocked</SelectItem>
-                                                    <SelectItem value="Expired">Expired</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         ) : (
                                             <Badge
                                                 variant="outline"
-                                                className={formData.status === "Active" ? "text-green-600 border-green-600" : "text-gray-600"}
+                                                className={formData.active ? "text-green-600 border-green-600" : "text-gray-600"}
                                             >
-                                                {formData.status}
+                                                {formData.active ? "Active" : "Inactive"}
                                             </Badge>
-                                        )}
-                                    </div>
-
-                                    {/* Service toggles */}
-                                    {["mail", "calendar", "contacts"].map((service) => (
-                                        <div key={service} className="flex items-center min-h-[24px]">
-                                            <span className="text-sm font-medium w-32">
-                                                {service.charAt(0).toUpperCase() + service.slice(1)} Service
-                                            </span>
-                                            {isEditing ? (
-                                                <div className="flex items-center">
-                                                    <Switch
-                                                        checked={formData.services?.[service] === "Enabled"}
-                                                        onCheckedChange={(checked) => handleServiceToggle(service, checked)}
-                                                    />
-                                                    <span className="ml-2 text-sm">
-                                                        {formData.services?.[service] === "Enabled" ? "Enabled" : "Disabled"}
-                                                    </span>
-                                                </div>
-                                            ) : (
-                                                <span className="text-sm">{formData.services?.[service]}</span>
-                                            )}
-                                        </div>
-                                    ))}
-
-                                    <div className="flex items-center">
-                                        <span className="text-sm font-medium w-32">Auto-expiry</span>
-                                        {isEditing ? (
-                                            <div className="flex items-center">
-                                                <Switch
-                                                    checked={formData.services?.autoExpiry === "on"}
-                                                    onCheckedChange={(checked) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            services: {
-                                                                ...prev.services,
-                                                                autoExpiry: checked ? "on" : "off",
-                                                            },
-                                                        }))
-                                                    }
-                                                />
-                                                <span className="ml-2 text-sm">{formData.services?.autoExpiry === "on" ? "On" : "Off"}</span>
-                                            </div>
-                                        ) : (
-                                            <span className="text-sm">{formData.services?.autoExpiry}</span>
                                         )}
                                     </div>
                                 </div>
@@ -372,114 +330,10 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                 <div>
                                     <h3 className="text-lg font-medium mb-4">Personal Information</h3>
                                     <div className="grid grid-cols-2 gap-4">
-                                        {renderField("First Name", formData.personalInfo?.firstName, "firstName", "personalInfo")}
-                                        {renderField("Last Name", formData.personalInfo?.lastName, "lastName", "personalInfo")}
-                                        {renderField("Nick Name", formData.personalInfo?.nickName, "nickName", "personalInfo")}
-
-                                        <div className="space-y-1">
-                                            <label className="text-sm text-gray-500">Gender</label>
-                                            {isEditing ? (
-                                                <Select
-                                                    value={formData.personalInfo?.gender || "Not specified"}
-                                                    onValueChange={(value) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            personalInfo: {
-                                                                ...prev.personalInfo,
-                                                                gender: value,
-                                                            },
-                                                        }))
-                                                    }
-                                                >
-                                                    <SelectTrigger className="w-full h-8 min-h-[24px]">
-                                                        <SelectValue placeholder="Select gender" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="Male">Male</SelectItem>
-                                                        <SelectItem value="Female">Female</SelectItem>
-                                                        <SelectItem value="Not specified">Not specified</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            ) : (
-                                                <div className="text-sm">{formData.personalInfo?.gender || "-"}</div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3 className="text-lg font-medium mb-4">Personal Address</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {renderField("Street", formData.personalInfo?.street, "street", "personalInfo")}
-                                        {renderField("City", formData.personalInfo?.city, "city", "personalInfo")}
-                                        {renderField("State", formData.personalInfo?.state, "state", "personalInfo")}
-                                        {renderField("Postal code", formData.personalInfo?.postalCode, "postalCode", "personalInfo")}
-
-                                        <div className="space-y-1">
-                                            <label className="text-sm text-gray-500">Country/Region</label>
-                                            {isEditing ? (
-                                                <Select
-                                                    value={formData.personalInfo?.country || ""}
-                                                    onValueChange={(value) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            personalInfo: {
-                                                                ...prev.personalInfo,
-                                                                country: value,
-                                                            },
-                                                        }))
-                                                    }
-                                                >
-                                                    <SelectTrigger className="w-full h-8 min-h-[24px]">
-                                                        <SelectValue placeholder="Select country" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="United States">🇺🇸 United States</SelectItem>
-                                                        <SelectItem value="Canada">🇨🇦 Canada</SelectItem>
-                                                        <SelectItem value="United Kingdom">🇬🇧 United Kingdom</SelectItem>
-                                                        <SelectItem value="Australia">🇦🇺 Australia</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            ) : (
-                                                <div className="text-sm flex items-center">
-                                                    {formData.personalInfo?.country === "United States" && <span className="mr-2">🇺🇸</span>}
-                                                    {formData.personalInfo?.country || "-"}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {renderField(
-                                            "Mobile number",
-                                            formData.personalInfo?.mobileNumber,
-                                            "mobileNumber",
-                                            "personalInfo",
-                                            "tel",
-                                        )}
-                                        {renderField(
-                                            "Phone number",
-                                            formData.personalInfo?.phoneNumber,
-                                            "phoneNumber",
-                                            "personalInfo",
-                                            "tel",
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3 className="text-lg font-medium mb-4">Account Information</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {renderField(
-                                            "Account Creation Time",
-                                            formData.accountInfo?.creationTime,
-                                            "creationTime",
-                                            "accountInfo",
-                                        )}
-                                        {renderField(
-                                            "Last Password Reset Time",
-                                            formData.accountInfo?.lastPasswordResetTime,
-                                            "lastPasswordResetTime",
-                                            "accountInfo",
-                                        )}
+                                        {renderField("First Name", formData.first_name, "first_name")}
+                                        {renderField("Last Name", formData.last_name, "last_name")}
+                                        {renderField("Email", formData.email, "email", "email")}
+                                        {renderField("Phone", formData.phone, "phone", "tel")}
                                     </div>
                                 </div>
                             </div>
@@ -495,10 +349,10 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                     <div className="relative">
                                         <Avatar className="h-24 w-24">
                                             {imagePreview ? (
-                                                <AvatarImage src={imagePreview || "/placeholder.svg"} />
+                                                <AvatarImage src={imagePreview} />
                                             ) : (
                                                 <AvatarFallback className="text-2xl bg-gray-300">
-                                                    {formData.fullName
+                                                    {fullName
                                                         .split(" ")
                                                         .map((n) => n[0])
                                                         .join("")}
@@ -524,21 +378,31 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                     </div>
                                     <div className="text-center">
                                         {isEditing ? (
-                                            <Input
-                                                value={formData.fullName}
-                                                name="fullName"
-                                                onChange={(e) => handleInputChange(e)}
-                                                className="text-center font-medium h-6 min-h-[24px]"
-                                            />
+                                            <div className="space-y-2">
+                                                <Input
+                                                    value={formData.first_name}
+                                                    name="first_name"
+                                                    onChange={handleInputChange}
+                                                    className="text-center font-medium h-6 min-h-[24px]"
+                                                    placeholder="First Name"
+                                                />
+                                                <Input
+                                                    value={formData.last_name}
+                                                    name="last_name"
+                                                    onChange={handleInputChange}
+                                                    className="text-center font-medium h-6 min-h-[24px]"
+                                                    placeholder="Last Name"
+                                                />
+                                            </div>
                                         ) : (
-                                            <h3 className="font-medium">{formData.fullName}</h3>
+                                            <h3 className="font-medium">{fullName}</h3>
                                         )}
-                                        <div className="flex items-center text-sm text-gray-500">
+                                        <div className="flex items-center justify-center text-sm text-gray-500">
                                             {isEditing ? (
                                                 <Input
                                                     value={formData.email}
                                                     name="email"
-                                                    onChange={(e) => handleInputChange(e)}
+                                                    onChange={handleInputChange}
                                                     className="text-center h-6 min-h-[24px]"
                                                 />
                                             ) : (
@@ -561,8 +425,8 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                         <span className="text-sm font-medium w-32">Role</span>
                                         {isEditing ? (
                                             <Select
-                                                value={formData.role}
-                                                onValueChange={(value) => setFormData((prev) => ({ ...prev, role: value }))}
+                                                value={formData.role_type}
+                                                onValueChange={(value) => handleSelectChange("role_type", value)}
                                             >
                                                 <SelectTrigger className="w-[180px] h-8 min-h-[24px]">
                                                     <SelectValue placeholder="Select role" />
@@ -575,23 +439,16 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                                 </SelectContent>
                                             </Select>
                                         ) : (
-                                            <Badge variant="outline">{formData.role}</Badge>
+                                            <Badge variant="outline">{formData.role_type}</Badge>
                                         )}
-                                    </div>
-
-                                    <div className="flex items-center">
-                                        <span className="text-sm font-medium w-32">Used Storage</span>
-                                        <span className="text-sm">
-                                            {formData.storage?.used} / {formData.storage?.total}
-                                        </span>
                                     </div>
 
                                     <div className="flex items-center">
                                         <span className="text-sm font-medium w-32">Status</span>
                                         {isEditing ? (
                                             <Select
-                                                value={formData.status}
-                                                onValueChange={(value) => setFormData((prev) => ({ ...prev, status: value }))}
+                                                value={formData.active ? "Active" : "Inactive"}
+                                                onValueChange={(value) => handleSelectChange("active", value === "Active")}
                                             >
                                                 <SelectTrigger className="w-[180px] h-8 min-h-[24px]">
                                                     <SelectValue placeholder="Select status" />
@@ -599,62 +456,15 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                                 <SelectContent>
                                                     <SelectItem value="Active">Active</SelectItem>
                                                     <SelectItem value="Inactive">Inactive</SelectItem>
-                                                    <SelectItem value="Blocked">Blocked</SelectItem>
-                                                    <SelectItem value="Expired">Expired</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         ) : (
                                             <Badge
                                                 variant="outline"
-                                                className={formData.status === "Active" ? "text-green-600 border-green-600" : "text-gray-600"}
+                                                className={formData.active ? "text-green-600 border-green-600" : "text-gray-600"}
                                             >
-                                                {formData.status}
+                                                {formData.active ? "Active" : "Inactive"}
                                             </Badge>
-                                        )}
-                                    </div>
-
-                                    {/* Service toggles */}
-                                    {["mail", "calendar", "contacts"].map((service) => (
-                                        <div key={service} className="flex items-center min-h-[24px]">
-                                            <span className="text-sm font-medium w-32">
-                                                {service.charAt(0).toUpperCase() + service.slice(1)} Service
-                                            </span>
-                                            {isEditing ? (
-                                                <div className="flex items-center">
-                                                    <Switch
-                                                        checked={formData.services?.[service] === "Enabled"}
-                                                        onCheckedChange={(checked) => handleServiceToggle(service, checked)}
-                                                    />
-                                                    <span className="ml-2 text-sm">
-                                                        {formData.services?.[service] === "Enabled" ? "Enabled" : "Disabled"}
-                                                    </span>
-                                                </div>
-                                            ) : (
-                                                <span className="text-sm">{formData.services?.[service]}</span>
-                                            )}
-                                        </div>
-                                    ))}
-
-                                    <div className="flex items-center">
-                                        <span className="text-sm font-medium w-32">Auto-expiry</span>
-                                        {isEditing ? (
-                                            <div className="flex items-center">
-                                                <Switch
-                                                    checked={formData.services?.autoExpiry === "on"}
-                                                    onCheckedChange={(checked) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            services: {
-                                                                ...prev.services,
-                                                                autoExpiry: checked ? "on" : "off",
-                                                            },
-                                                        }))
-                                                    }
-                                                />
-                                                <span className="ml-2 text-sm">{formData.services?.autoExpiry === "on" ? "On" : "Off"}</span>
-                                            </div>
-                                        ) : (
-                                            <span className="text-sm">{formData.services?.autoExpiry}</span>
                                         )}
                                     </div>
                                 </div>
@@ -665,94 +475,13 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                 <div>
                                     <h3 className="text-lg font-medium mb-4">Account Information</h3>
                                     <div className="grid grid-cols-2 gap-4">
-                                        {renderField(
-                                            "Account Creation Time",
-                                            formData.accountInfo?.creationTime,
-                                            "creationTime",
-                                            "accountInfo",
-                                        )}
-                                        {renderField(
-                                            "Last Password Reset Time",
-                                            formData.accountInfo?.lastPasswordResetTime,
-                                            "lastPasswordResetTime",
-                                            "accountInfo",
-                                        )}
-                                        {renderField(
-                                            "Last Login Time",
-                                            formData.accountInfo?.lastLoginTime,
-                                            "lastLoginTime",
-                                            "accountInfo",
-                                        )}
-                                        {renderField("Time Zone", formData.accountInfo?.timeZone, "timeZone", "accountInfo")}
-
-                                        <div className="space-y-1">
-                                            <label className="text-sm text-gray-500">User ID</label>
-                                            {isEditing ? (
-                                                <Input
-                                                    name="userId"
-                                                    value={formData.accountInfo?.userId || ""}
-                                                    onChange={(e) => handleInputChange(e, "accountInfo")}
-                                                    className="h-8 text-sm"
-                                                />
-                                            ) : (
-                                                <div className="text-sm flex items-center">
-                                                    {formData.accountInfo?.userId || "-"}
-                                                    {formData.accountInfo?.userId && (
-                                                        <button
-                                                            onClick={() => copyToClipboard(formData.accountInfo.userId, "User ID")}
-                                                            className="ml-1 text-gray-400 hover:text-gray-600"
-                                                        >
-                                                            <Copy className="h-3 w-3" />
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3 className="text-lg font-medium mb-4">Custom Information</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-1">
-                                            <label className="text-sm text-gray-500">az.active.company</label>
-                                            {isEditing ? (
-                                                <Input
-                                                    name="az.active.company"
-                                                    value={formData.customInfo?.["az.active.company"] || ""}
-                                                    onChange={(e) =>
-                                                        setFormData((prev) => ({
-                                                            ...prev,
-                                                            customInfo: {
-                                                                ...prev.customInfo,
-                                                                ["az.active.company"]: e.target.value,
-                                                            },
-                                                        }))
-                                                    }
-                                                    className="h-8 text-sm"
-                                                />
-                                            ) : (
-                                                <div className="text-sm">{formData.customInfo?.["az.active.company"] || "-"}</div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <h3 className="text-lg font-medium mb-4">Work Fields</h3>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        {renderField("Employee ID", formData.workFields?.employeeId, "employeeId", "workFields")}
-                                        {renderField("Designation", formData.workFields?.designation, "designation", "workFields")}
-                                        {renderField("Department", formData.workFields?.department, "department", "workFields")}
-                                        {renderField(
-                                            "Mobile Number",
-                                            formData.workFields?.mobileNumber,
-                                            "mobileNumber",
-                                            "workFields",
-                                            "tel",
-                                        )}
-                                        {renderField("Extension", formData.workFields?.extension, "extension", "workFields")}
-                                        {renderField("Phone Number", formData.workFields?.phoneNumber, "phoneNumber", "workFields", "tel")}
+                                        {renderField("Username", formData.user_name, "user_name")}
+                                        {renderField("Role Type", formData.role_type, "role_type")}
+                                        {renderField("Activation Date", formData.activation_date, "activation_date", "date")}
+                                        {renderField("Creation Date", formData.creation_date, "creation_date")}
+                                        {renderField("Created By", formData.created_by, "created_by")}
+                                        {renderField("Last Updated By", formData.last_updated_by, "last_updated_by")}
+                                        {renderField("Last Update Date", formData.last_update_date, "last_update_date")}
                                     </div>
                                 </div>
                             </div>

@@ -54,113 +54,106 @@ import { Badge } from "@/components/ui/badge"
 const userData = [
     {
         id: 1,
-        username: "pankaj.chhabra",
-        fullName: "Pankaj Chhabra",
+        user_name: "pankaj.chhabra",
+        password: "securePass123!",
+        first_name: "Pankaj",
+        last_name: "Chhabra",
         email: "pankaj.chhabra@sumslice.com",
-        role: "Administrator",
-        status: "Active",
-        lastLogin: "2025-03-15 09:45:22",
-        domain: "example.com",
-        hasMailAccount: true,
-        personalInfo: {
-            firstName: "Pankaj",
-            lastName: "Chhabra",
-            nickName: "Pankaj Chhabra",
-            gender: "Not specified",
-            street: "",
-            city: "",
-            state: "",
-            postalCode: "",
-            country: "United States",
-            mobileNumber: "",
-            phoneNumber: "",
-        },
-        accountInfo: {
-            creationTime: "01/16/25 11:25:24 AM",
-            lastPasswordResetTime: "03/3/25 09:20:33 AM",
-            lastLoginTime: "03/3/25 09:23:24 AM",
-            timeZone: "America/New_York",
-            userId: "87625973",
-        },
-        customInfo: {
-            "az.active.company": "spadskrun",
-        },
-        workFields: {
-            employeeId: "",
-            designation: "",
-            department: "",
-            mobileNumber: "",
-            extension: "",
-            phoneNumber: "",
-        },
-        services: {
-            mail: "Enabled",
-            calendar: "Enabled",
-            contacts: "Enabled",
-            autoExpiry: "on",
-        },
-        storage: {
-            used: "677 KB",
-            total: "30 GB",
-        },
+        role_type: "Administrator",
+        role_use_type: "Full Access",
+        active: true,
+        activation_date: "2025-01-16",
+        phone: "+1-555-123-4567",
+        creation_date: "2025-01-16 11:25:24",
+        created_by: "system_admin",
+        last_updated_by: "system_admin",
+        last_update_date: "2025-03-03 09:20:33",
     },
     {
         id: 2,
-        username: "jane.smith",
-        fullName: "Jane Smith",
+        user_name: "jane.smith",
+        password: "janePass2025!",
+        first_name: "Jane",
+        last_name: "Smith",
         email: "jane.smith@example.com",
-        role: "Super Administrator",
-        status: "Active",
-        lastLogin: "2025-03-28 14:30:10",
-        domain: "example.com",
-        hasMailAccount: true,
+        role_type: "Super Administrator",
+        role_use_type: "Full Access",
+        active: true,
+        activation_date: "2025-01-20",
+        phone: "+1-555-987-6543",
+        creation_date: "2025-01-20 14:30:10",
+        created_by: "system_admin",
+        last_updated_by: "system_admin",
+        last_update_date: "2025-03-28 14:30:10",
     },
     {
         id: 3,
-        username: "bob.johnson",
-        fullName: "Bob Johnson",
+        user_name: "bob.johnson",
+        password: "bobSecure456!",
+        first_name: "Bob",
+        last_name: "Johnson",
         email: "bob.johnson@example.com",
-        role: "Custom Administrator",
-        status: "Inactive",
-        lastLogin: "2025-02-10 11:20:45",
-        domain: "example.com",
-        hasMailAccount: false,
+        role_type: "Custom Administrator",
+        role_use_type: "Limited Access",
+        active: false,
+        activation_date: "2025-02-01",
+        phone: "+1-555-456-7890",
+        creation_date: "2025-02-01 11:20:45",
+        created_by: "system_admin",
+        last_updated_by: "system_admin",
+        last_update_date: "2025-02-10 11:20:45",
     },
     {
         id: 4,
-        username: "alice.williams",
-        fullName: "Alice Williams",
+        user_name: "alice.williams",
+        password: "alicePass789!",
+        first_name: "Alice",
+        last_name: "Williams",
         email: "alice.williams@othercompany.com",
-        role: "User",
-        status: "Blocked",
-        lastLogin: "2025-01-05 08:15:30",
-        domain: "othercompany.com",
-        hasMailAccount: true,
+        role_type: "User",
+        role_use_type: "Basic Access",
+        active: false,
+        activation_date: "2025-01-05",
+        phone: "+1-555-321-6547",
+        creation_date: "2025-01-05 08:15:30",
+        created_by: "system_admin",
+        last_updated_by: "system_admin",
+        last_update_date: "2025-01-05 08:15:30",
     },
     {
         id: 5,
-        username: "charlie.brown",
-        fullName: "Charlie Brown",
+        user_name: "charlie.brown",
+        password: "charliePass101!",
+        first_name: "Charlie",
+        last_name: "Brown",
         email: "charlie.brown@example.com",
-        role: "User",
-        status: "Expired",
-        lastLogin: "2024-12-20 16:40:12",
-        domain: "example.com",
-        hasMailAccount: true,
+        role_type: "User",
+        role_use_type: "Basic Access",
+        active: false,
+        activation_date: "2024-12-20",
+        phone: "+1-555-654-3210",
+        creation_date: "2024-12-20 16:40:12",
+        created_by: "system_admin",
+        last_updated_by: "system_admin",
+        last_update_date: "2024-12-20 16:40:12",
     },
-]
+];
 
 // Define all available columns
 const allColumns = [
-    { id: "username", name: "Username", defaultVisible: true },
-    { id: "fullName", name: "Full Name", defaultVisible: true },
+    { id: "user_name", name: "Username", defaultVisible: true },
+    { id: "first_name", name: "First Name", defaultVisible: true },
+    { id: "last_name", name: "Last Name", defaultVisible: true },
     { id: "email", name: "Email", defaultVisible: true },
-    { id: "role", name: "Role", defaultVisible: true },
-    { id: "status", name: "Status", defaultVisible: true },
-    { id: "lastLogin", name: "Last Login", defaultVisible: true },
-    { id: "domain", name: "Domain", defaultVisible: false },
-    { id: "hasMailAccount", name: "Mail Account", defaultVisible: false },
-]
+    { id: "role_type", name: "Role Type", defaultVisible: true },
+    { id: "active", name: "Active", defaultVisible: true },
+    { id: "activation_date", name: "Activation Date", defaultVisible: false },
+    { id: "phone", name: "Phone", defaultVisible: false },
+    { id: "creation_date", name: "Creation Date", defaultVisible: false },
+    { id: "created_by", name: "Created By", defaultVisible: false },
+    { id: "last_updated_by", name: "Last Updated By", defaultVisible: false },
+    { id: "last_update_date", name: "Last Update Date", defaultVisible: false },
+];
 
 export default function UsersPage() {
     const { toast } = useToast()
@@ -188,18 +181,15 @@ export default function UsersPage() {
     // User stats
     const userStats = {
         total: userData.length,
-        active: userData.filter((user) => user.status === "Active").length,
-        inactive: userData.filter((user) => user.status === "Inactive").length,
-        blocked: userData.filter((user) => user.status === "Blocked").length,
-        expired: userData.filter((user) => user.status === "Expired").length,
-        withMailAccount: userData.filter((user) => user.hasMailAccount).length,
+        active: userData.filter((user) => user.active).length,
+        inactive: userData.filter((user) => !user.active).length,
         roleDistribution: {
-            Administrator: userData.filter((user) => user.role === "Administrator").length,
-            "Super Administrator": userData.filter((user) => user.role === "Super Administrator").length,
-            "Custom Administrator": userData.filter((user) => user.role === "Custom Administrator").length,
-            User: userData.filter((user) => user.role === "User").length,
+            Administrator: userData.filter((user) => user.role_type === "Administrator").length,
+            "Super Administrator": userData.filter((user) => user.role_type === "Super Administrator").length,
+            "Custom Administrator": userData.filter((user) => user.role_type === "Custom Administrator").length,
+            User: userData.filter((user) => user.role_type === "User").length,
         },
-    }
+    };
 
     // Animation effect
     useEffect(() => {
@@ -297,10 +287,11 @@ export default function UsersPage() {
     let filteredUsers = userData.filter((user) => {
         // First apply search term
         const matchesSearch =
-            user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.user_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.role.toLowerCase().includes(searchTerm.toLowerCase())
+            user.role_type.toLowerCase().includes(searchTerm.toLowerCase());
 
         if (!matchesSearch) return false
 
@@ -382,12 +373,9 @@ export default function UsersPage() {
     }
 
     // Get initials from full name
-    const getInitials = (name) => {
-        return name
-            .split(" ")
-            .map((n) => n[0])
-            .join("")
-    }
+    const getInitials = (firstName, lastName) => {
+        return `${firstName[0] || ""}${lastName[0] || ""}`;
+    };
 
     // Get random color for avatar
     const getAvatarColor = (id) => {
@@ -536,21 +524,21 @@ export default function UsersPage() {
                                         onCheckedChange={handleSelectAll}
                                     />
                                 </TableHead>
-                                {visibleColumns.includes("username") && (
+                                {visibleColumns.includes("user_name") && (
                                     <TableHead>
                                         <div
                                             className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                            onClick={() => handleSort("username")}
+                                            onClick={() => handleSort("user_name")}
                                         >
                                             Username
-                                            {sortColumn === "username" &&
+                                            {sortColumn === "user_name" &&
                                                 (sortDirection === "asc" ? (
                                                     <ChevronUp className="h-4 w-4" />
                                                 ) : (
                                                     <ChevronDown className="h-4 w-4" />
                                                 ))}
                                             <Popover
-                                                open={activeFilterColumn === "username"}
+                                                open={activeFilterColumn === "user_name"}
                                                 onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                             >
                                                 <PopoverTrigger asChild>
@@ -559,11 +547,11 @@ export default function UsersPage() {
                                                         size="sm"
                                                         className="h-6 w-6 p-0 ml-1"
                                                         onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("username")
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("user_name");
                                                         }}
                                                     >
-                                                        <Filter className={`h-3 w-3 ${columnFilters.username ? "text-green-600" : ""}`} />
+                                                        <Filter className={`h-3 w-3 ${columnFilters.user_name ? "text-green-600" : ""}`} />
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-80">
@@ -575,28 +563,28 @@ export default function UsersPage() {
                                                             className="grid grid-cols-2 gap-2"
                                                         >
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="equals" id="equals" />
-                                                                <Label htmlFor="equals">Equals</Label>
+                                                                <RadioGroupItem value="equals" id="equals-user_name" />
+                                                                <Label htmlFor="equals-user_name">Equals</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notEquals" id="notEquals" />
-                                                                <Label htmlFor="notEquals">Does Not Equal</Label>
+                                                                <RadioGroupItem value="notEquals" id="notEquals-user_name" />
+                                                                <Label htmlFor="notEquals-user_name">Does Not Equal</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="beginsWith" id="beginsWith" />
-                                                                <Label htmlFor="beginsWith">Begins With</Label>
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-user_name" />
+                                                                <Label htmlFor="beginsWith-user_name">Begins With</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="endsWith" id="endsWith" />
-                                                                <Label htmlFor="endsWith">Ends With</Label>
+                                                                <RadioGroupItem value="endsWith" id="endsWith-user_name" />
+                                                                <Label htmlFor="endsWith-user_name">Ends With</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="contains" id="contains" />
-                                                                <Label htmlFor="contains">Contains</Label>
+                                                                <RadioGroupItem value="contains" id="contains-user_name" />
+                                                                <Label htmlFor="contains-user_name">Contains</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notContains" id="notContains" />
-                                                                <Label htmlFor="notContains">Does Not Contain</Label>
+                                                                <RadioGroupItem value="notContains" id="notContains-user_name" />
+                                                                <Label htmlFor="notContains-user_name">Does Not Contain</Label>
                                                             </div>
                                                         </RadioGroup>
                                                         <Input
@@ -610,8 +598,8 @@ export default function UsersPage() {
                                                             </Button>
                                                             <Button
                                                                 onClick={() => {
-                                                                    applyFilter("username", filterType, filterValue)
-                                                                    setFilterValue("")
+                                                                    applyFilter("user_name", filterType, filterValue);
+                                                                    setFilterValue("");
                                                                 }}
                                                                 className="bg-green-700 hover:bg-green-800"
                                                             >
@@ -624,21 +612,21 @@ export default function UsersPage() {
                                         </div>
                                     </TableHead>
                                 )}
-                                {visibleColumns.includes("fullName") && (
+                                {visibleColumns.includes("first_name") && (
                                     <TableHead>
                                         <div
                                             className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                            onClick={() => handleSort("fullName")}
+                                            onClick={() => handleSort("first_name")}
                                         >
-                                            Full Name
-                                            {sortColumn === "fullName" &&
+                                            First Name
+                                            {sortColumn === "first_name" &&
                                                 (sortDirection === "asc" ? (
                                                     <ChevronUp className="h-4 w-4" />
                                                 ) : (
                                                     <ChevronDown className="h-4 w-4" />
                                                 ))}
                                             <Popover
-                                                open={activeFilterColumn === "fullName"}
+                                                open={activeFilterColumn === "first_name"}
                                                 onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                             >
                                                 <PopoverTrigger asChild>
@@ -647,44 +635,44 @@ export default function UsersPage() {
                                                         size="sm"
                                                         className="h-6 w-6 p-0 ml-1"
                                                         onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("fullName")
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("first_name");
                                                         }}
                                                     >
-                                                        <Filter className={`h-3 w-3 ${columnFilters.fullName ? "text-green-600" : ""}`} />
+                                                        <Filter className={`h-3 w-3 ${columnFilters.first_name ? "text-green-600" : ""}`} />
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-80">
                                                     <div className="space-y-4">
-                                                        <h4 className="font-medium">Filter Full Name</h4>
+                                                        <h4 className="font-medium">Filter First Name</h4>
                                                         <RadioGroup
                                                             defaultValue={filterType}
                                                             onValueChange={setFilterType}
                                                             className="grid grid-cols-2 gap-2"
                                                         >
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="equals" id="equals-fullName" />
-                                                                <Label htmlFor="equals-fullName">Equals</Label>
+                                                                <RadioGroupItem value="equals" id="equals-first_name" />
+                                                                <Label htmlFor="equals-first_name">Equals</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notEquals" id="notEquals-fullName" />
-                                                                <Label htmlFor="notEquals-fullName">Does Not Equal</Label>
+                                                                <RadioGroupItem value="notEquals" id="notEquals-first_name" />
+                                                                <Label htmlFor="notEquals-first_name">Does Not Equal</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="beginsWith" id="beginsWith-fullName" />
-                                                                <Label htmlFor="beginsWith-fullName">Begins With</Label>
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-first_name" />
+                                                                <Label htmlFor="beginsWith-first_name">Begins With</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="endsWith" id="endsWith-fullName" />
-                                                                <Label htmlFor="endsWith-fullName">Ends With</Label>
+                                                                <RadioGroupItem value="endsWith" id="endsWith-first_name" />
+                                                                <Label htmlFor="endsWith-first_name">Ends With</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="contains" id="contains-fullName" />
-                                                                <Label htmlFor="contains-fullName">Contains</Label>
+                                                                <RadioGroupItem value="contains" id="contains-first_name" />
+                                                                <Label htmlFor="contains-first_name">Contains</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notContains" id="notContains-fullName" />
-                                                                <Label htmlFor="notContains-fullName">Does Not Contain</Label>
+                                                                <RadioGroupItem value="notContains" id="notContains-first_name" />
+                                                                <Label htmlFor="notContains-first_name">Does Not Contain</Label>
                                                             </div>
                                                         </RadioGroup>
                                                         <Input
@@ -698,8 +686,96 @@ export default function UsersPage() {
                                                             </Button>
                                                             <Button
                                                                 onClick={() => {
-                                                                    applyFilter("fullName", filterType, filterValue)
-                                                                    setFilterValue("")
+                                                                    applyFilter("first_name", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("last_name") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("last_name")}
+                                        >
+                                            Last Name
+                                            {sortColumn === "last_name" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "last_name"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("last_name");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.last_name ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Last Name</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-last_name" />
+                                                                <Label htmlFor="equals-last_name">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-last_name" />
+                                                                <Label htmlFor="notEquals-last_name">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-last_name" />
+                                                                <Label htmlFor="beginsWith-last_name">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-last_name" />
+                                                                <Label htmlFor="endsWith-last_name">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-last_name" />
+                                                                <Label htmlFor="contains-last_name">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-last_name" />
+                                                                <Label htmlFor="notContains-last_name">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("last_name", filterType, filterValue);
+                                                                    setFilterValue("");
                                                                 }}
                                                                 className="bg-green-700 hover:bg-green-800"
                                                             >
@@ -735,8 +811,8 @@ export default function UsersPage() {
                                                         size="sm"
                                                         className="h-6 w-6 p-0 ml-1"
                                                         onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("email")
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("email");
                                                         }}
                                                     >
                                                         <Filter className={`h-3 w-3 ${columnFilters.email ? "text-green-600" : ""}`} />
@@ -786,8 +862,8 @@ export default function UsersPage() {
                                                             </Button>
                                                             <Button
                                                                 onClick={() => {
-                                                                    applyFilter("email", filterType, filterValue)
-                                                                    setFilterValue("")
+                                                                    applyFilter("email", filterType, filterValue);
+                                                                    setFilterValue("");
                                                                 }}
                                                                 className="bg-green-700 hover:bg-green-800"
                                                             >
@@ -800,21 +876,21 @@ export default function UsersPage() {
                                         </div>
                                     </TableHead>
                                 )}
-                                {visibleColumns.includes("role") && (
+                                {visibleColumns.includes("role_type") && (
                                     <TableHead>
                                         <div
                                             className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                            onClick={() => handleSort("role")}
+                                            onClick={() => handleSort("role_type")}
                                         >
-                                            Role
-                                            {sortColumn === "role" &&
+                                            Role Type
+                                            {sortColumn === "role_type" &&
                                                 (sortDirection === "asc" ? (
                                                     <ChevronUp className="h-4 w-4" />
                                                 ) : (
                                                     <ChevronDown className="h-4 w-4" />
                                                 ))}
                                             <Popover
-                                                open={activeFilterColumn === "role"}
+                                                open={activeFilterColumn === "role_type"}
                                                 onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                             >
                                                 <PopoverTrigger asChild>
@@ -823,44 +899,44 @@ export default function UsersPage() {
                                                         size="sm"
                                                         className="h-6 w-6 p-0 ml-1"
                                                         onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("role")
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("role_type");
                                                         }}
                                                     >
-                                                        <Filter className={`h-3 w-3 ${columnFilters.role ? "text-green-600" : ""}`} />
+                                                        <Filter className={`h-3 w-3 ${columnFilters.role_type ? "text-green-600" : ""}`} />
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-80">
                                                     <div className="space-y-4">
-                                                        <h4 className="font-medium">Filter Role</h4>
+                                                        <h4 className="font-medium">Filter Role Type</h4>
                                                         <RadioGroup
                                                             defaultValue={filterType}
                                                             onValueChange={setFilterType}
                                                             className="grid grid-cols-2 gap-2"
                                                         >
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="equals" id="equals-role" />
-                                                                <Label htmlFor="equals-role">Equals</Label>
+                                                                <RadioGroupItem value="equals" id="equals-role_type" />
+                                                                <Label htmlFor="equals-role_type">Equals</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notEquals" id="notEquals-role" />
-                                                                <Label htmlFor="notEquals-role">Does Not Equal</Label>
+                                                                <RadioGroupItem value="notEquals" id="notEquals-role_type" />
+                                                                <Label htmlFor="notEquals-role_type">Does Not Equal</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="beginsWith" id="beginsWith-role" />
-                                                                <Label htmlFor="beginsWith-role">Begins With</Label>
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-role_type" />
+                                                                <Label htmlFor="beginsWith-role_type">Begins With</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="endsWith" id="endsWith-role" />
-                                                                <Label htmlFor="endsWith-role">Ends With</Label>
+                                                                <RadioGroupItem value="endsWith" id="endsWith-role_type" />
+                                                                <Label htmlFor="endsWith-role_type">Ends With</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="contains" id="contains-role" />
-                                                                <Label htmlFor="contains-role">Contains</Label>
+                                                                <RadioGroupItem value="contains" id="contains-role_type" />
+                                                                <Label htmlFor="contains-role_type">Contains</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notContains" id="notContains-role" />
-                                                                <Label htmlFor="notContains-role">Does Not Contain</Label>
+                                                                <RadioGroupItem value="notContains" id="notContains-role_type" />
+                                                                <Label htmlFor="notContains-role_type">Does Not Contain</Label>
                                                             </div>
                                                         </RadioGroup>
                                                         <Input
@@ -874,8 +950,8 @@ export default function UsersPage() {
                                                             </Button>
                                                             <Button
                                                                 onClick={() => {
-                                                                    applyFilter("role", filterType, filterValue)
-                                                                    setFilterValue("")
+                                                                    applyFilter("role_type", filterType, filterValue);
+                                                                    setFilterValue("");
                                                                 }}
                                                                 className="bg-green-700 hover:bg-green-800"
                                                             >
@@ -888,21 +964,21 @@ export default function UsersPage() {
                                         </div>
                                     </TableHead>
                                 )}
-                                {visibleColumns.includes("status") && (
+                                {visibleColumns.includes("active") && (
                                     <TableHead>
                                         <div
                                             className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                            onClick={() => handleSort("status")}
+                                            onClick={() => handleSort("active")}
                                         >
-                                            Status
-                                            {sortColumn === "status" &&
+                                            Active
+                                            {sortColumn === "active" &&
                                                 (sortDirection === "asc" ? (
                                                     <ChevronUp className="h-4 w-4" />
                                                 ) : (
                                                     <ChevronDown className="h-4 w-4" />
                                                 ))}
                                             <Popover
-                                                open={activeFilterColumn === "status"}
+                                                open={activeFilterColumn === "active"}
                                                 onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                             >
                                                 <PopoverTrigger asChild>
@@ -911,293 +987,28 @@ export default function UsersPage() {
                                                         size="sm"
                                                         className="h-6 w-6 p-0 ml-1"
                                                         onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("status")
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("active");
                                                         }}
                                                     >
-                                                        <Filter className={`h-3 w-3 ${columnFilters.status ? "text-green-600" : ""}`} />
+                                                        <Filter className={`h-3 w-3 ${columnFilters.active ? "text-green-600" : ""}`} />
                                                     </Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="w-80">
                                                     <div className="space-y-4">
-                                                        <h4 className="font-medium">Filter Status</h4>
+                                                        <h4 className="font-medium">Filter Active</h4>
                                                         <RadioGroup
                                                             defaultValue={filterType}
                                                             onValueChange={setFilterType}
                                                             className="grid grid-cols-2 gap-2"
                                                         >
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="equals" id="equals-status" />
-                                                                <Label htmlFor="equals-status">Equals</Label>
+                                                                <RadioGroupItem value="equals" id="equals-active" />
+                                                                <Label htmlFor="equals-active">Equals</Label>
                                                             </div>
                                                             <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notEquals" id="notEquals-status" />
-                                                                <Label htmlFor="notEquals-status">Does Not Equal</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="beginsWith" id="beginsWith-status" />
-                                                                <Label htmlFor="beginsWith-status">Begins With</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="endsWith" id="endsWith-status" />
-                                                                <Label htmlFor="endsWith-status">Ends With</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="contains" id="contains-status" />
-                                                                <Label htmlFor="contains-status">Contains</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notContains" id="notContains-status" />
-                                                                <Label htmlFor="notContains-status">Does Not Contain</Label>
-                                                            </div>
-                                                        </RadioGroup>
-                                                        <Input
-                                                            placeholder="Filter value..."
-                                                            value={filterValue}
-                                                            onChange={(e) => setFilterValue(e.target.value)}
-                                                        />
-                                                        <div className="flex justify-between">
-                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
-                                                                Cancel
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    applyFilter("status", filterType, filterValue)
-                                                                    setFilterValue("")
-                                                                }}
-                                                                className="bg-green-700 hover:bg-green-800"
-                                                            >
-                                                                Apply Filter
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-                                    </TableHead>
-                                )}
-                                {visibleColumns.includes("lastLogin") && (
-                                    <TableHead>
-                                        <div
-                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                            onClick={() => handleSort("lastLogin")}
-                                        >
-                                            Last Login
-                                            {sortColumn === "lastLogin" &&
-                                                (sortDirection === "asc" ? (
-                                                    <ChevronUp className="h-4 w-4" />
-                                                ) : (
-                                                    <ChevronDown className="h-4 w-4" />
-                                                ))}
-                                            <Popover
-                                                open={activeFilterColumn === "lastLogin"}
-                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
-                                            >
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-6 w-6 p-0 ml-1"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("lastLogin")
-                                                        }}
-                                                    >
-                                                        <Filter className={`h-3 w-3 ${columnFilters.lastLogin ? "text-green-600" : ""}`} />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-80">
-                                                    <div className="space-y-4">
-                                                        <h4 className="font-medium">Filter Last Login</h4>
-                                                        <RadioGroup
-                                                            defaultValue={filterType}
-                                                            onValueChange={setFilterType}
-                                                            className="grid grid-cols-2 gap-2"
-                                                        >
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="equals" id="equals-lastLogin" />
-                                                                <Label htmlFor="equals-lastLogin">Equals</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notEquals" id="notEquals-lastLogin" />
-                                                                <Label htmlFor="notEquals-lastLogin">Does Not Equal</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="beginsWith" id="beginsWith-lastLogin" />
-                                                                <Label htmlFor="beginsWith-lastLogin">Begins With</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="endsWith" id="endsWith-lastLogin" />
-                                                                <Label htmlFor="endsWith-lastLogin">Ends With</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="contains" id="contains-lastLogin" />
-                                                                <Label htmlFor="contains-lastLogin">Contains</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notContains" id="notContains-lastLogin" />
-                                                                <Label htmlFor="notContains-lastLogin">Does Not Contain</Label>
-                                                            </div>
-                                                        </RadioGroup>
-                                                        <Input
-                                                            placeholder="Filter value..."
-                                                            value={filterValue}
-                                                            onChange={(e) => setFilterValue(e.target.value)}
-                                                        />
-                                                        <div className="flex justify-between">
-                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
-                                                                Cancel
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    applyFilter("lastLogin", filterType, filterValue)
-                                                                    setFilterValue("")
-                                                                }}
-                                                                className="bg-green-700 hover:bg-green-800"
-                                                            >
-                                                                Apply Filter
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-                                    </TableHead>
-                                )}
-                                {visibleColumns.includes("domain") && (
-                                    <TableHead>
-                                        <div
-                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                            onClick={() => handleSort("domain")}
-                                        >
-                                            Domain
-                                            {sortColumn === "domain" &&
-                                                (sortDirection === "asc" ? (
-                                                    <ChevronUp className="h-4 w-4" />
-                                                ) : (
-                                                    <ChevronDown className="h-4 w-4" />
-                                                ))}
-                                            <Popover
-                                                open={activeFilterColumn === "domain"}
-                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
-                                            >
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        parametr
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-6 w-6 p-0 ml-1"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("domain")
-                                                        }}
-                                                    >
-                                                        <Filter className={`h-3 w-3 ${columnFilters.domain ? "text-green-600" : ""}`} />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-80">
-                                                    <div className="space-y-4">
-                                                        <h4 className="font-medium">Filter Domain</h4>
-                                                        <RadioGroup
-                                                            defaultValue={filterType}
-                                                            onValueChange={setFilterType}
-                                                            className="grid grid-cols-2 gap-2"
-                                                        >
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="equals" id="equals-domain" />
-                                                                <Label htmlFor="equals-domain">Equals</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notEquals" id="notEquals-domain" />
-                                                                <Label htmlFor="notEquals-domain">Does Not Equal</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="beginsWith" id="beginsWith-domain" />
-                                                                <Label htmlFor="beginsWith-domain">Begins With</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="endsWith" id="endsWith-domain" />
-                                                                <Label htmlFor="endsWith-domain">Ends With</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="contains" id="contains-domain" />
-                                                                <Label htmlFor="contains-domain">Contains</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notContains" id="notContains-domain" />
-                                                                <Label htmlFor="notContains-domain">Does Not Contain</Label>
-                                                            </div>
-                                                        </RadioGroup>
-                                                        <Input
-                                                            placeholder="Filter value..."
-                                                            value={filterValue}
-                                                            onChange={(e) => setFilterValue(e.target.value)}
-                                                        />
-                                                        <div className="flex justify-between">
-                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
-                                                                Cancel
-                                                            </Button>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    applyFilter("domain", filterType, filterValue)
-                                                                    setFilterValue("")
-                                                                }}
-                                                                className="bg-green-700 hover:bg-green-800"
-                                                            >
-                                                                Apply Filter
-                                                            </Button>
-                                                        </div>
-                                                    </div>
-                                                </PopoverContent>
-                                            </Popover>
-                                        </div>
-                                    </TableHead>
-                                )}
-                                {visibleColumns.includes("hasMailAccount") && (
-                                    <TableHead>
-                                        <div
-                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                            onClick={() => handleSort("hasMailAccount")}
-                                        >
-                                            Mail Account
-                                            {sortColumn === "hasMailAccount" &&
-                                                (sortDirection === "asc" ? (
-                                                    <ChevronUp className="h-4 w-4" />
-                                                ) : (
-                                                    <ChevronDown className="h-4 w-4" />
-                                                ))}
-                                            <Popover
-                                                open={activeFilterColumn === "hasMailAccount"}
-                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
-                                            >
-                                                <PopoverTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-6 w-6 p-0 ml-1"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            setActiveFilterColumn("hasMailAccount")
-                                                        }}
-                                                    >
-                                                        <Filter className={`h-3 w-3 ${columnFilters.hasMailAccount ? "text-green-600" : ""}`} />
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-80">
-                                                    <div className="space-y-4">
-                                                        <h4 className="font-medium">Filter Mail Account</h4>
-                                                        <RadioGroup
-                                                            defaultValue={filterType}
-                                                            onValueChange={setFilterType}
-                                                            className="grid grid-cols-2 gap-2"
-                                                        >
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="equals" id="equals-mail" />
-                                                                <Label htmlFor="equals-mail">Equals</Label>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <RadioGroupItem value="notEquals" id="notEquals-mail" />
-                                                                <Label htmlFor="notEquals-mail">Does Not Equal</Label>
+                                                                <RadioGroupItem value="notEquals" id="notEquals-active" />
+                                                                <Label htmlFor="notEquals-active">Does Not Equal</Label>
                                                             </div>
                                                         </RadioGroup>
                                                         <Select value={filterValue} onValueChange={setFilterValue}>
@@ -1205,8 +1016,8 @@ export default function UsersPage() {
                                                                 <SelectValue placeholder="Select value" />
                                                             </SelectTrigger>
                                                             <SelectContent>
-                                                                <SelectItem value="true">Yes</SelectItem>
-                                                                <SelectItem value="false">No</SelectItem>
+                                                                <SelectItem value="true">Active</SelectItem>
+                                                                <SelectItem value="false">Inactive</SelectItem>
                                                             </SelectContent>
                                                         </Select>
                                                         <div className="flex justify-between">
@@ -1215,8 +1026,536 @@ export default function UsersPage() {
                                                             </Button>
                                                             <Button
                                                                 onClick={() => {
-                                                                    applyFilter("hasMailAccount", filterType, filterValue)
-                                                                    setFilterValue("")
+                                                                    applyFilter("active", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("activation_date") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("activation_date")}
+                                        >
+                                            Activation Date
+                                            {sortColumn === "activation_date" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "activation_date"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("activation_date");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.activation_date ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Activation Date</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-activation_date" />
+                                                                <Label htmlFor="equals-activation_date">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-activation_date" />
+                                                                <Label htmlFor="notEquals-activation_date">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-activation_date" />
+                                                                <Label htmlFor="beginsWith-activation_date">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-activation_date" />
+                                                                <Label htmlFor="endsWith-activation_date">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-activation_date" />
+                                                                <Label htmlFor="contains-activation_date">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-activation_date" />
+                                                                <Label htmlFor="notContains-activation_date">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("activation_date", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("phone") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("phone")}
+                                        >
+                                            Phone
+                                            {sortColumn === "phone" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "phone"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("phone");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.phone ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Phone</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-phone" />
+                                                                <Label htmlFor="equals-phone">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-phone" />
+                                                                <Label htmlFor="notEquals-phone">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-phone" />
+                                                                <Label htmlFor="beginsWith-phone">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-phone" />
+                                                                <Label htmlFor="endsWith-phone">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-phone" />
+                                                                <Label htmlFor="contains-phone">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-phone" />
+                                                                <Label htmlFor="notContains-phone">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("phone", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("creation_date") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("creation_date")}
+                                        >
+                                            Creation Date
+                                            {sortColumn === "creation_date" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "creation_date"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("creation_date");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.creation_date ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Creation Date</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-creation_date" />
+                                                                <Label htmlFor="equals-creation_date">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-creation_date" />
+                                                                <Label htmlFor="notEquals-creation_date">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-creation_date" />
+                                                                <Label htmlFor="beginsWith-creation_date">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-creation_date" />
+                                                                <Label htmlFor="endsWith-creation_date">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-creation_date" />
+                                                                <Label htmlFor="contains-creation_date">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-creation_date" />
+                                                                <Label htmlFor="notContains-creation_date">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("creation_date", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("created_by") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("created_by")}
+                                        >
+                                            Created By
+                                            {sortColumn === "created_by" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "created_by"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("created_by");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.created_by ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Created By</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-created_by" />
+                                                                <Label htmlFor="equals-created_by">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-created_by" />
+                                                                <Label htmlFor="notEquals-created_by">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-created_by" />
+                                                                <Label htmlFor="beginsWith-created_by">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-created_by" />
+                                                                <Label htmlFor="endsWith-created_by">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-created_by" />
+                                                                <Label htmlFor="contains-created_by">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-created_by" />
+                                                                <Label htmlFor="notContains-created_by">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("created_by", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("last_updated_by") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("last_updated_by")}
+                                        >
+                                            Last Updated By
+                                            {sortColumn === "last_updated_by" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "last_updated_by"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("last_updated_by");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.last_updated_by ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Last Updated By</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-last_updated_by" />
+                                                                <Label htmlFor="equals-last_updated_by">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-last_updated_by" />
+                                                                <Label htmlFor="notEquals-last_updated_by">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-last_updated_by" />
+                                                                <Label htmlFor="beginsWith-last_updated_by">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-last_updated_by" />
+                                                                <Label htmlFor="endsWith-last_updated_by">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-last_updated_by" />
+                                                                <Label htmlFor="contains-last_updated_by">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-last_updated_by" />
+                                                                <Label htmlFor="notContains-last_updated_by">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("last_updated_by", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("last_update_date") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("last_update_date")}
+                                        >
+                                            Last Update Date
+                                            {sortColumn === "last_update_date" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "last_update_date"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("last_update_date");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.last_update_date ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Last Update Date</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-last_update_date" />
+                                                                <Label htmlFor="equals-last_update_date">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-last_update_date" />
+                                                                <Label htmlFor="notEquals-last_update_date">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-last_update_date" />
+                                                                <Label htmlFor="beginsWith-last_update_date">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-last_update_date" />
+                                                                <Label htmlFor="endsWith-last_update_date">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-last_update_date" />
+                                                                <Label htmlFor="contains-last_update_date">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-last_update_date" />
+                                                                <Label htmlFor="notContains-last_update_date">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("last_update_date", filterType, filterValue);
+                                                                    setFilterValue("");
                                                                 }}
                                                                 className="bg-green-700 hover:bg-green-800"
                                                             >
@@ -1244,90 +1583,130 @@ export default function UsersPage() {
                                                 onCheckedChange={() => handleUserSelection(user.id)}
                                             />
                                         </TableCell>
-                                        {visibleColumns.includes("username") && (
+                                        {visibleColumns.includes("user_name") && (
                                             <TableCell>
                                                 <button
                                                     className="text-green-600 hover:underline focus:outline-none font-medium flex items-center gap-1"
                                                     onClick={() => handleUserClick(user)}
                                                 >
-                                                    {user.username}
+                                                    {user.user_name}
                                                 </button>
                                             </TableCell>
                                         )}
-                                        {visibleColumns.includes("fullName") && (
+                                        {visibleColumns.includes("first_name") && (
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
                                                     <Avatar className="h-8 w-8">
                                                         <AvatarFallback className={`text-xs ${getAvatarColor(user.id)}`}>
-                                                            {getInitials(user.fullName)}
+                                                            {getInitials(user.first_name, user.last_name)}
                                                         </AvatarFallback>
                                                     </Avatar>
-                                                    <span>{user.fullName}</span>
+                                                    <span>{user.first_name}</span>
                                                 </div>
                                             </TableCell>
                                         )}
+                                        {visibleColumns.includes("last_name") && <TableCell>{user.last_name}</TableCell>}
                                         {visibleColumns.includes("email") && <TableCell>{user.email}</TableCell>}
-                                        {visibleColumns.includes("role") && (
+                                        {visibleColumns.includes("role_type") && (
                                             <TableCell>
                                                 <Badge
                                                     variant="outline"
                                                     className={
-                                                        user.role === "Administrator"
+                                                        user.role_type === "Administrator"
                                                             ? "bg-blue-50 text-blue-700 border-blue-200"
-                                                            : user.role === "Super Administrator"
+                                                            : user.role_type === "Super Administrator"
                                                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
-                                                                : user.role === "Custom Administrator"
+                                                                : user.role_type === "Custom Administrator"
                                                                     ? "bg-amber-50 text-amber-700 border-amber-200"
                                                                     : "bg-violet-50 text-violet-700 border-violet-200"
                                                     }
                                                 >
-                                                    {user.role}
+                                                    {user.role_type}
                                                 </Badge>
                                             </TableCell>
                                         )}
-                                        {visibleColumns.includes("status") && (
-                                            <TableCell>
-                                                <div className="flex items-center gap-1">
-                                                    {getStatusIcon(user.status)}
-                                                    <span
-                                                        className={
-                                                            user.status === "Active"
-                                                                ? "text-green-600"
-                                                                : user.status === "Inactive"
-                                                                    ? "text-yellow-600"
-                                                                    : user.status === "Blocked"
-                                                                        ? "text-red-600"
-                                                                        : "text-gray-600"
-                                                        }
-                                                    >
-                                                        {user.status}
-                                                    </span>
-                                                </div>
-                                            </TableCell>
-                                        )}
-                                        {visibleColumns.includes("lastLogin") && (
-                                            <TableCell>
-                                                <div className="flex items-center gap-1">
-                                                    <Clock className="h-3 w-3 text-gray-400" />
-                                                    <span>{user.lastLogin}</span>
-                                                </div>
-                                            </TableCell>
-                                        )}
-                                        {visibleColumns.includes("domain") && <TableCell>{user.domain}</TableCell>}
-                                        {visibleColumns.includes("hasMailAccount") && (
-                                            <TableCell>
-                                                <Badge
-                                                    variant={user.hasMailAccount ? "default" : "secondary"}
-                                                    className={
-                                                        user.hasMailAccount
-                                                            ? "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                                                            : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                                                    }
+                                        {visibleColumns.includes("active") && (
+                                            <TableHead>
+                                                <div
+                                                    className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                                    onClick={() => handleSort("active")}
                                                 >
-                                                    {user.hasMailAccount ? "Yes" : "No"}
-                                                </Badge>
-                                            </TableCell>
+                                                    Active
+                                                    {sortColumn === "active" &&
+                                                        (sortDirection === "asc" ? (
+                                                            <ChevronUp className="h-4 w-4" />
+                                                        ) : (
+                                                            <ChevronDown className="h-4 w-4" />
+                                                        ))}
+                                                    <Popover
+                                                        open={activeFilterColumn === "active"}
+                                                        onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                                    >
+                                                        <PopoverTrigger asChild>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="h-6 w-6 p-0 ml-1"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setActiveFilterColumn("active");
+                                                                }}
+                                                            >
+                                                                <Filter className={`h-3 w-3 ${columnFilters.active ? "text-green-600" : ""}`} />
+                                                            </Button>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent className="w-80">
+                                                            <div className="space-y-4">
+                                                                <h4 className="font-medium">Filter Active</h4>
+                                                                <RadioGroup
+                                                                    defaultValue={filterType}
+                                                                    onValueChange={setFilterType}
+                                                                    className="grid grid-cols-2 gap-2"
+                                                                >
+                                                                    <div className="flex items-center space-x-2">
+                                                                        <RadioGroupItem value="equals" id="equals-active" />
+                                                                        <Label htmlFor="equals-active">Equals</Label>
+                                                                    </div>
+                                                                    <div className="flex items-center space-x-2">
+                                                                        <RadioGroupItem value="notEquals" id="notEquals-active" />
+                                                                        <Label htmlFor="notEquals-active">Does Not Equal</Label>
+                                                                    </div>
+                                                                </RadioGroup>
+                                                                <Select value={filterValue} onValueChange={setFilterValue}>
+                                                                    <SelectTrigger>
+                                                                        <SelectValue placeholder="Select value" />
+                                                                    </SelectTrigger>
+                                                                    <SelectContent>
+                                                                        <SelectItem value="true">Active</SelectItem>
+                                                                        <SelectItem value="false">Inactive</SelectItem>
+                                                                    </SelectContent>
+                                                                </Select>
+                                                                <div className="flex justify-between">
+                                                                    <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                    <Button
+                                                                        onClick={() => {
+                                                                            applyFilter("active", filterType, filterValue);
+                                                                            setFilterValue("");
+                                                                        }}
+                                                                        className="bg-green-700 hover:bg-green-800"
+                                                                    >
+                                                                        Apply Filter
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </PopoverContent>
+                                                    </Popover>
+                                                </div>
+                                            </TableHead>
                                         )}
+                                        {visibleColumns.includes("activation_date") && <TableCell>{user.activation_date}</TableCell>}
+                                        {visibleColumns.includes("phone") && <TableCell>{user.phone}</TableCell>}
+                                        {visibleColumns.includes("creation_date") && <TableCell>{user.creation_date}</TableCell>}
+                                        {visibleColumns.includes("created_by") && <TableCell>{user.created_by}</TableCell>}
+                                        {visibleColumns.includes("last_updated_by") && <TableCell>{user.last_updated_by}</TableCell>}
+                                        {visibleColumns.includes("last_update_date") && <TableCell>{user.last_update_date}</TableCell>}
                                         <TableCell>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
