@@ -216,51 +216,83 @@ export default function SystemAdministratorPage() {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {statsCards.map((card, index) => (
-                    <Card
-                        key={index}
-                        className="relative overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] cursor-pointer"
-                    >
-                        <div className={`absolute inset-0 opacity-10 ${card.bgLight}`}></div>
-                        <div className="absolute top-0 right-0 h-24 w-24 -mt-8 -mr-8 rounded-full bg-gradient-to-br opacity-20 blur-xl transform rotate-45 ${card.color}"></div>
+                {/* Fee Types Card */}
+                <Card className="relative overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] cursor-pointer">
+                    <div className="absolute top-6 right-6 bg-emerald-500 text-white p-2 rounded">
+                        <Settings className="h-5 w-5" />
+                    </div>
+                    <div className="mb-1 text-gray-600 text-sm">Fee Types</div>
+                    <div className="text-3xl font-bold mb-4">10</div>
+                    <div className="flex items-center text-emerald-500 text-sm">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="mr-1"
+                        >
+                            <path d="M8 4L12 8H9V12H7V8H4L8 4Z" fill="currentColor" />
+                        </svg>
+                        +2 from last month
+                    </div>
+                </Card>
 
-                        <div className="p-6 relative z-10">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <p className="text-sm font-medium text-gray-500 mb-1">{card.title}</p>
-                                    <h3 className="text-3xl font-bold">
-                                        {animate ? counters[card.title.toLowerCase().replace(" ", "")] : 0}
-                                    </h3>
-                                </div>
-                                <div className={`p-3 rounded-lg bg-gradient-to-br ${card.color} text-white`}>
-                                    <card.icon className="h-5 w-5" />
-                                </div>
-                            </div>
+                {/* Divisions Card */}
+                <Card className="relative overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] cursor-pointer">
+                    <div className="absolute top-6 right-6 bg-blue-500 text-white p-2 rounded">
+                        <Database className="h-5 w-5" />
+                    </div>
+                    <div className="mb-1 text-gray-600 text-sm">Divisions</div>
+                    <div className="text-3xl font-bold mb-4">5</div>
+                    <div className="flex items-center text-emerald-500 text-sm">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="mr-1"
+                        >
+                            <path d="M8 4L12 8H9V12H7V8H4L8 4Z" fill="currentColor" />
+                        </svg>
+                        +1 from last month
+                    </div>
+                </Card>
 
-                            {card.trend && (
-                                <div className="mt-4 flex items-center">
-                                    {card.trendUp === true ? (
-                                        <ArrowUpRight className="h-4 w-4 text-emerald-500 mr-1" />
-                                    ) : card.trendUp === false ? (
-                                        <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
-                                    ) : (
-                                        <span className="h-4 w-4 mr-1">—</span>
-                                    )}
-                                    <span
-                                        className={`text-sm ${card.trendUp === true
-                                                ? "text-emerald-500"
-                                                : card.trendUp === false
-                                                    ? "text-red-500"
-                                                    : "text-gray-500"
-                                            }`}
-                                    >
-                                        {card.trend} from last month
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                    </Card>
-                ))}
+                {/* Deal Types Card */}
+                <Card className="relative overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] cursor-pointer">
+                    <div className="absolute top-6 right-6 bg-purple-500 text-white p-2 rounded">
+                        <Puzzle className="h-5 w-5" />
+                    </div>
+                    <div className="mb-1 text-gray-600 text-sm">Deal Types</div>
+                    <div className="text-3xl font-bold mb-4">3</div>
+                    <div className="flex items-center text-gray-500 text-sm">
+                        <span className="mr-1">—</span>0 from last month
+                    </div>
+                </Card>
+
+                {/* Performance Card */}
+                <Card className="relative overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg hover:translate-y-[-4px] cursor-pointer">
+                    <div className="absolute top-6 right-6 bg-orange-500 text-white p-2 rounded">
+                        <Zap className="h-5 w-5" />
+                    </div>
+                    <div className="mb-1 text-gray-600 text-sm">Performance</div>
+                    <div className="text-3xl font-bold mb-4">10</div>
+                    <div className="flex items-center text-emerald-500 text-sm">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="mr-1"
+                        >
+                            <path d="M8 4L12 8H9V12H7V8H4L8 4Z" fill="currentColor" />
+                        </svg>
+                        +3 from last month
+                    </div>
+                </Card>
             </div>
 
             {/* Note */}

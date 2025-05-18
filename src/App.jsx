@@ -13,6 +13,13 @@ import SystemAdministratorPage from './components/Administration/System/System';
 import UsersPage from './components/Administration/System/Users';
 import RolesAndPrivilegesPage from './components/Administration/System/RolesandPrivileges';
 import PrivilegesPage from './components/Administration/System/privileges';
+import ApplicationAdminLayout from './components/Administration/Application/Layout';
+import ApplicationDashboardPage from './components/Administration/Application/DashBoard';
+import FeeTypePage from './components/Administration/Application/FeeType';
+import DivisionSetupPage from './components/Administration/Application/DivisonSetup';
+import PerformancePage from './components/Administration/Application/Performance';
+import DealTypePage from './components/Administration/Application/DealType';
+import VolumeTierSetupsPage from './components/Administration/Application/VolumeTyreSetups';
 
 function App() {
   const location = useLocation();
@@ -38,6 +45,14 @@ function App() {
           <Route path="users" element={<UsersPage />} />
           <Route path="roles" element={<RolesAndPrivilegesPage />} />
           <Route path="privileges" element={<PrivilegesPage />} />
+        </Route>
+        <Route path="/administration/application" element={<ApplicationAdminLayout />}>
+          <Route index element={<ApplicationDashboardPage />} />
+          <Route path="fee-type" element={<FeeTypePage />} />
+          <Route path="division-setup" element={<DivisionSetupPage />} />
+          <Route path="performance" element={<PerformancePage />} />
+          <Route path="deal-type" element={<DealTypePage />} />
+          <Route path="volume-tier-setups" element={<VolumeTierSetupsPage />} />
         </Route>
       </Routes>
 
