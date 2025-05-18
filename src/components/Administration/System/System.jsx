@@ -21,6 +21,10 @@ import {
     PieChart,
     LineChart,
     RefreshCw,
+    Settings,
+    Database,
+    Puzzle,
+    Zap
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
