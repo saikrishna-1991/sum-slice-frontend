@@ -44,62 +44,81 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 
-// Mock division data
+// Updated division data to match the fields from the image
 const divisionData = [
     {
         id: 1,
-        divisionName: "Northeast",
-        location: "New York, NY",
-        manager: "John Smith",
-        employeeCount: 120,
-        establishedDate: "2020-01-15",
+        divisionType: "Company",
+        divisionCode: "601",
+        divisionName: "601-MF Rocky Mt",
+        parentDivision: "Rocky Mount",
+        warehouse: "WH-RM01",
+        startDate: "2021-01-01",
+        endDate: "",
+        accountedCurrency: "USD",
         isActive: true,
     },
     {
         id: 2,
-        divisionName: "Southeast",
-        location: "Miami, FL",
-        manager: "Sarah Johnson",
-        employeeCount: 85,
-        establishedDate: "2020-03-22",
+        divisionType: "Branch",
+        divisionCode: "602",
+        divisionName: "602-MF Denver",
+        parentDivision: "Mountain Region",
+        warehouse: "WH-DN02",
+        startDate: "2021-05-15",
+        endDate: "",
+        accountedCurrency: "USD",
         isActive: true,
     },
     {
         id: 3,
-        divisionName: "Midwest",
-        location: "Chicago, IL",
-        manager: "Michael Brown",
-        employeeCount: 95,
-        establishedDate: "2020-05-10",
+        divisionType: "Branch",
+        divisionCode: "603",
+        divisionName: "603-MF Phoenix",
+        parentDivision: "Southwest",
+        warehouse: "WH-PX03",
+        startDate: "2022-03-01",
+        endDate: "",
+        accountedCurrency: "USD",
         isActive: true,
     },
     {
         id: 4,
-        divisionName: "Southwest",
-        location: "Houston, TX",
-        manager: "Emily Davis",
-        employeeCount: 75,
-        establishedDate: "2021-02-18",
+        divisionType: "Company",
+        divisionCode: "604",
+        divisionName: "604-MF Seattle",
+        parentDivision: "Pacific Northwest",
+        warehouse: "WH-ST04",
+        startDate: "2020-11-10",
+        endDate: "",
+        accountedCurrency: "USD",
         isActive: false,
     },
     {
         id: 5,
-        divisionName: "West",
-        location: "Los Angeles, CA",
-        manager: "Robert Wilson",
-        employeeCount: 110,
-        establishedDate: "2021-07-05",
+        divisionType: "Branch",
+        divisionCode: "605",
+        divisionName: "605-MF Dallas",
+        parentDivision: "Texas Region",
+        warehouse: "WH-DL05",
+        startDate: "2023-06-20",
+        endDate: "",
+        accountedCurrency: "USD",
         isActive: true,
     },
-]
+];
 
-// Define all available columns
+
+// Define all available columns based on the image
 const allColumns = [
+    { id: "divisionType", name: "Division Type", defaultVisible: true },
+    { id: "divisionCode", name: "Division Code", defaultVisible: true },
     { id: "divisionName", name: "Division Name", defaultVisible: true },
-    { id: "location", name: "Location", defaultVisible: true },
-    { id: "manager", name: "Manager", defaultVisible: true },
-    { id: "employeeCount", name: "Employee Count", defaultVisible: true },
-    { id: "establishedDate", name: "Established Date", defaultVisible: true },
+    { id: "parentDivision", name: "Parent Division", defaultVisible: true },
+    { id: "warehouse", name: "Warehouse", defaultVisible: true },
+    { id: "startDate", name: "Start Date", defaultVisible: true },
+    { id: "endDate", name: "End Date", defaultVisible: true },
+    { id: "accountedCurrency", name: "Accounted Currency", defaultVisible: true },
     { id: "isActive", name: "Active", defaultVisible: true },
 ]
 
@@ -125,28 +144,33 @@ export default function DivisionSetupPage() {
     const [sortDirection, setSortDirection] = useState("asc")
     const [animate, setAnimate] = useState(false)
 
-    // New division form state
+    // Updated new division form state
     const [newDivision, setNewDivision] = useState({
+        divisionType: "",
+        divisionCode: "",
         divisionName: "",
-        location: "",
-        manager: "",
-        employeeCount: "",
-        establishedDate: "",
+        parentDivision: "",
+        warehouse: "",
+        startDate: "",
+        endDate: "",
+        accountedCurrency: "",
         isActive: true,
     })
 
-    // Edit division form state
+    // Updated edit division form state
     const [editDivision, setEditDivision] = useState({
         id: 0,
+        divisionType: "",
+        divisionCode: "",
         divisionName: "",
-        location: "",
-        manager: "",
-        employeeCount: "",
-        establishedDate: "",
+        parentDivision: "",
+        warehouse: "",
+        startDate: "",
+        endDate: "",
+        accountedCurrency: "",
         isActive: true,
     })
 
-    // Animation effect
     useEffect(() => {
         setAnimate(true)
     }, [])
@@ -183,24 +207,25 @@ export default function DivisionSetupPage() {
     }
 
     const handleSaveNewDivision = () => {
-        // In a real app, you would save to the database here
         toast({
             title: "Division Added",
             description: "The division has been added successfully.",
         })
         setIsAddDivisionDialogOpen(false)
         setNewDivision({
+            divisionType: "",
+            divisionCode: "",
             divisionName: "",
-            location: "",
-            manager: "",
-            employeeCount: "",
-            establishedDate: "",
+            parentDivision: "",
+            warehouse: "",
+            startDate: "",
+            endDate: "",
+            accountedCurrency: "",
             isActive: true,
         })
     }
 
     const handleSaveEditDivision = () => {
-        // In a real app, you would update the database here
         toast({
             title: "Division Updated",
             description: "The division has been updated successfully.",
@@ -263,21 +288,22 @@ export default function DivisionSetupPage() {
         }
     }
 
-    // Apply filters and sorting to division data
     let filteredDivisions = divisionData.filter((division) => {
-        // First apply search term
         const matchesSearch =
+            division.divisionType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            division.divisionCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
             division.divisionName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            division.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            division.manager.toLowerCase().includes(searchTerm.toLowerCase())
+            division.parentDivision.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            division.warehouse.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            division.startDate.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            division.endDate.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            division.accountedCurrency.toLowerCase().includes(searchTerm.toLowerCase())
 
         if (!matchesSearch) return false
 
-        // Apply column filters
         for (const [column, filter] of Object.entries(columnFilters)) {
             let value = division[column]
 
-            // Handle boolean values
             if (typeof value === "boolean") {
                 value = value ? "true" : "false"
             } else if (typeof value === "number") {
@@ -314,17 +340,14 @@ export default function DivisionSetupPage() {
         return true
     })
 
-    // Apply sorting
     if (sortColumn) {
         filteredDivisions = [...filteredDivisions].sort((a, b) => {
             let valueA = a[sortColumn]
             let valueB = b[sortColumn]
 
-            // Handle undefined values
             if (valueA === undefined) valueA = ""
             if (valueB === undefined) valueB = ""
 
-            // Convert to strings for comparison
             valueA = valueA?.toString() || ""
             valueB = valueB?.toString() || ""
 
@@ -345,7 +368,6 @@ export default function DivisionSetupPage() {
                 </div>
             </div>
 
-            {/* Search and Actions */}
             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                 <div className="relative">
                     <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
@@ -436,7 +458,6 @@ export default function DivisionSetupPage() {
                 </div>
             </div>
 
-            {/* Active Filters */}
             {Object.keys(columnFilters).length > 0 && (
                 <div className="flex flex-wrap gap-2 items-center p-3 bg-gray-50 rounded-lg">
                     <span className="text-sm text-gray-500 mr-2">Active Filters:</span>
@@ -456,7 +477,6 @@ export default function DivisionSetupPage() {
                 </div>
             )}
 
-            {/* Divisions Table */}
             <Card className="border rounded-lg overflow-hidden shadow-sm">
                 <Table>
                     <TableHeader className="bg-gray-50">
@@ -467,6 +487,182 @@ export default function DivisionSetupPage() {
                                     onCheckedChange={handleSelectAll}
                                 />
                             </TableHead>
+                            {visibleColumns.includes("divisionType") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("divisionType")}
+                                    >
+                                        Division Type
+                                        {sortColumn === "divisionType" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "divisionType"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setActiveFilterColumn("divisionType")
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.divisionType ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Division Type</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-divisionType" />
+                                                            <Label htmlFor="equals-divisionType">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-divisionType" />
+                                                            <Label htmlFor="notEquals-divisionType">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-divisionType" />
+                                                            <Label htmlFor="beginsWith-divisionType">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-divisionType" />
+                                                            <Label htmlFor="endsWith-divisionType">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-divisionType" />
+                                                            <Label htmlFor="contains-divisionType">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-divisionType" />
+                                                            <Label htmlFor="notContains-divisionType">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("divisionType", filterType, filterValue)
+                                                                setFilterValue("")
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("divisionCode") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("divisionCode")}
+                                    >
+                                        Division Code
+                                        {sortColumn === "divisionCode" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "divisionCode"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setActiveFilterColumn("divisionCode")
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.divisionCode ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Division Code</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-divisionCode" />
+                                                            <Label htmlFor="equals-divisionCode">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-divisionCode" />
+                                                            <Label htmlFor="notEquals-divisionCode">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-divisionCode" />
+                                                            <Label htmlFor="beginsWith-divisionCode">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-divisionCode" />
+                                                            <Label htmlFor="endsWith-divisionCode">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-divisionCode" />
+                                                            <Label htmlFor="contains-divisionCode">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-divisionCode" />
+                                                            <Label htmlFor="notContains-divisionCode">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("divisionCode", filterType, filterValue)
+                                                                setFilterValue("")
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
                             {visibleColumns.includes("divisionName") && (
                                 <TableHead>
                                     <div
@@ -555,21 +751,21 @@ export default function DivisionSetupPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("location") && (
+                            {visibleColumns.includes("parentDivision") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("location")}
+                                        onClick={() => handleSort("parentDivision")}
                                     >
-                                        Location
-                                        {sortColumn === "location" &&
+                                        Parent Division
+                                        {sortColumn === "parentDivision" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "location"}
+                                            open={activeFilterColumn === "parentDivision"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -579,43 +775,43 @@ export default function DivisionSetupPage() {
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setActiveFilterColumn("location")
+                                                        setActiveFilterColumn("parentDivision")
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.location ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.parentDivision ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Location</h4>
+                                                    <h4 className="font-medium">Filter Parent Division</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-location" />
-                                                            <Label htmlFor="equals-location">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-parentDivision" />
+                                                            <Label htmlFor="equals-parentDivision">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-location" />
-                                                            <Label htmlFor="notEquals-location">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-parentDivision" />
+                                                            <Label htmlFor="notEquals-parentDivision">Does Not Equal</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="beginsWith" id="beginsWith-location" />
-                                                            <Label htmlFor="beginsWith-location">Begins With</Label>
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-parentDivision" />
+                                                            <Label htmlFor="beginsWith-parentDivision">Begins With</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="endsWith" id="endsWith-location" />
-                                                            <Label htmlFor="endsWith-location">Ends With</Label>
+                                                            <RadioGroupItem value="endsWith" id="endsWith-parentDivision" />
+                                                            <Label htmlFor="endsWith-parentDivision">Ends With</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="contains" id="contains-location" />
-                                                            <Label htmlFor="contains-location">Contains</Label>
+                                                            <RadioGroupItem value="contains" id="contains-parentDivision" />
+                                                            <Label htmlFor="contains-parentDivision">Contains</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notContains" id="notContains-location" />
-                                                            <Label htmlFor="notContains-location">Does Not Contain</Label>
+                                                            <RadioGroupItem value="notContains" id="notContains-parentDivision" />
+                                                            <Label htmlFor="notContains-parentDivision">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -629,7 +825,7 @@ export default function DivisionSetupPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("location", filterType, filterValue)
+                                                                applyFilter("parentDivision", filterType, filterValue)
                                                                 setFilterValue("")
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
@@ -643,21 +839,21 @@ export default function DivisionSetupPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("manager") && (
+                            {visibleColumns.includes("warehouse") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("manager")}
+                                        onClick={() => handleSort("warehouse")}
                                     >
-                                        Manager
-                                        {sortColumn === "manager" &&
+                                        Warehouse
+                                        {sortColumn === "warehouse" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "manager"}
+                                            open={activeFilterColumn === "warehouse"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -667,43 +863,43 @@ export default function DivisionSetupPage() {
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setActiveFilterColumn("manager")
+                                                        setActiveFilterColumn("warehouse")
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.manager ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.warehouse ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Manager</h4>
+                                                    <h4 className="font-medium">Filter Warehouse</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-manager" />
-                                                            <Label htmlFor="equals-manager">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-warehouse" />
+                                                            <Label htmlFor="equals-warehouse">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-manager" />
-                                                            <Label htmlFor="notEquals-manager">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-warehouse" />
+                                                            <Label htmlFor="notEquals-warehouse">Does Not Equal</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="beginsWith" id="beginsWith-manager" />
-                                                            <Label htmlFor="beginsWith-manager">Begins With</Label>
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-warehouse" />
+                                                            <Label htmlFor="beginsWith-warehouse">Begins With</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="endsWith" id="endsWith-manager" />
-                                                            <Label htmlFor="endsWith-manager">Ends With</Label>
+                                                            <RadioGroupItem value="endsWith" id="endsWith-warehouse" />
+                                                            <Label htmlFor="endsWith-warehouse">Ends With</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="contains" id="contains-manager" />
-                                                            <Label htmlFor="contains-manager">Contains</Label>
+                                                            <RadioGroupItem value="contains" id="contains-warehouse" />
+                                                            <Label htmlFor="contains-warehouse">Contains</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notContains" id="notContains-manager" />
-                                                            <Label htmlFor="notContains-manager">Does Not Contain</Label>
+                                                            <RadioGroupItem value="notContains" id="notContains-warehouse" />
+                                                            <Label htmlFor="notContains-warehouse">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -717,7 +913,7 @@ export default function DivisionSetupPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("manager", filterType, filterValue)
+                                                                applyFilter("warehouse", filterType, filterValue)
                                                                 setFilterValue("")
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
@@ -731,21 +927,21 @@ export default function DivisionSetupPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("employeeCount") && (
+                            {visibleColumns.includes("startDate") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("employeeCount")}
+                                        onClick={() => handleSort("startDate")}
                                     >
-                                        Employee Count
-                                        {sortColumn === "employeeCount" &&
+                                        Start Date
+                                        {sortColumn === "startDate" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "employeeCount"}
+                                            open={activeFilterColumn === "startDate"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -755,27 +951,43 @@ export default function DivisionSetupPage() {
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setActiveFilterColumn("employeeCount")
+                                                        setActiveFilterColumn("startDate")
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.employeeCount ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.startDate ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Employee Count</h4>
+                                                    <h4 className="font-medium">Filter Start Date</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-employeeCount" />
-                                                            <Label htmlFor="equals-employeeCount">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-startDate" />
+                                                            <Label htmlFor="equals-startDate">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-employeeCount" />
-                                                            <Label htmlFor="notEquals-employeeCount">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-startDate" />
+                                                            <Label htmlFor="notEquals-startDate">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-startDate" />
+                                                            <Label htmlFor="beginsWith-startDate">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-startDate" />
+                                                            <Label htmlFor="endsWith-startDate">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-startDate" />
+                                                            <Label htmlFor="contains-startDate">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-startDate" />
+                                                            <Label htmlFor="notContains-startDate">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -789,7 +1001,7 @@ export default function DivisionSetupPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("employeeCount", filterType, filterValue)
+                                                                applyFilter("startDate", filterType, filterValue)
                                                                 setFilterValue("")
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
@@ -803,21 +1015,21 @@ export default function DivisionSetupPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("establishedDate") && (
+                            {visibleColumns.includes("endDate") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("establishedDate")}
+                                        onClick={() => handleSort("endDate")}
                                     >
-                                        Established Date
-                                        {sortColumn === "establishedDate" &&
+                                        End Date
+                                        {sortColumn === "endDate" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "establishedDate"}
+                                            open={activeFilterColumn === "endDate"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -827,43 +1039,43 @@ export default function DivisionSetupPage() {
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setActiveFilterColumn("establishedDate")
+                                                        setActiveFilterColumn("endDate")
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.establishedDate ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.endDate ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Established Date</h4>
+                                                    <h4 className="font-medium">Filter End Date</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-establishedDate" />
-                                                            <Label htmlFor="equals-establishedDate">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-endDate" />
+                                                            <Label htmlFor="equals-endDate">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-establishedDate" />
-                                                            <Label htmlFor="notEquals-establishedDate">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-endDate" />
+                                                            <Label htmlFor="notEquals-endDate">Does Not Equal</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="beginsWith" id="beginsWith-establishedDate" />
-                                                            <Label htmlFor="beginsWith-establishedDate">Begins With</Label>
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-endDate" />
+                                                            <Label htmlFor="beginsWith-endDate">Begins With</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="endsWith" id="endsWith-establishedDate" />
-                                                            <Label htmlFor="endsWith-establishedDate">Ends With</Label>
+                                                            <RadioGroupItem value="endsWith" id="endsWith-endDate" />
+                                                            <Label htmlFor="endsWith-endDate">Ends With</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="contains" id="contains-establishedDate" />
-                                                            <Label htmlFor="contains-establishedDate">Contains</Label>
+                                                            <RadioGroupItem value="contains" id="contains-endDate" />
+                                                            <Label htmlFor="contains-endDate">Contains</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notContains" id="notContains-establishedDate" />
-                                                            <Label htmlFor="notContains-establishedDate">Does Not Contain</Label>
+                                                            <RadioGroupItem value="notContains" id="notContains-endDate" />
+                                                            <Label htmlFor="notContains-endDate">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -877,7 +1089,95 @@ export default function DivisionSetupPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("establishedDate", filterType, filterValue)
+                                                                applyFilter("endDate", filterType, filterValue)
+                                                                setFilterValue("")
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("accountedCurrency") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("accountedCurrency")}
+                                    >
+                                        Accounted Currency
+                                        {sortColumn === "accountedCurrency" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "accountedCurrency"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setActiveFilterColumn("accountedCurrency")
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.accountedCurrency ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Accounted Currency</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-accountedCurrency" />
+                                                            <Label htmlFor="equals-accountedCurrency">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-accountedCurrency" />
+                                                            <Label htmlFor="notEquals-accountedCurrency">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-accountedCurrency" />
+                                                            <Label htmlFor="beginsWith-accountedCurrency">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-accountedCurrency" />
+                                                            <Label htmlFor="endsWith-accountedCurrency">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-accountedCurrency" />
+                                                            <Label htmlFor="contains-accountedCurrency">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-accountedCurrency" />
+                                                            <Label htmlFor="notContains-accountedCurrency">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("accountedCurrency", filterType, filterValue)
                                                                 setFilterValue("")
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
@@ -982,6 +1282,8 @@ export default function DivisionSetupPage() {
                                             onCheckedChange={() => handleDivisionSelection(division.id)}
                                         />
                                     </TableCell>
+                                    {visibleColumns.includes("divisionType") && <TableCell>{division.divisionType}</TableCell>}
+                                    {visibleColumns.includes("divisionCode") && <TableCell>{division.divisionCode}</TableCell>}
                                     {visibleColumns.includes("divisionName") && (
                                         <TableCell>
                                             <button
@@ -992,17 +1294,11 @@ export default function DivisionSetupPage() {
                                             </button>
                                         </TableCell>
                                     )}
-                                    {visibleColumns.includes("location") && (
-                                        <TableCell>
-                                            <div className="flex items-center">
-                                                <MapPin className="h-4 w-4 text-gray-400 mr-1" />
-                                                {division.location}
-                                            </div>
-                                        </TableCell>
-                                    )}
-                                    {visibleColumns.includes("manager") && <TableCell>{division.manager}</TableCell>}
-                                    {visibleColumns.includes("employeeCount") && <TableCell>{division.employeeCount}</TableCell>}
-                                    {visibleColumns.includes("establishedDate") && <TableCell>{division.establishedDate}</TableCell>}
+                                    {visibleColumns.includes("parentDivision") && <TableCell>{division.parentDivision}</TableCell>}
+                                    {visibleColumns.includes("warehouse") && <TableCell>{division.warehouse}</TableCell>}
+                                    {visibleColumns.includes("startDate") && <TableCell>{division.startDate}</TableCell>}
+                                    {visibleColumns.includes("endDate") && <TableCell>{division.endDate}</TableCell>}
+                                    {visibleColumns.includes("accountedCurrency") && <TableCell>{division.accountedCurrency}</TableCell>}
                                     {visibleColumns.includes("isActive") && (
                                         <TableCell>
                                             <Badge
@@ -1050,7 +1346,6 @@ export default function DivisionSetupPage() {
                 </Table>
             </Card>
 
-            {/* Pagination */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-4">
                 <div className="flex items-center gap-2">
                     <span>Show</span>
@@ -1087,7 +1382,6 @@ export default function DivisionSetupPage() {
                 </div>
             </div>
 
-            {/* Delete Confirmation Dialog */}
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -1107,7 +1401,6 @@ export default function DivisionSetupPage() {
                 </DialogContent>
             </Dialog>
 
-            {/* Add Division Dialog */}
             <Dialog open={isAddDivisionDialogOpen} onOpenChange={setIsAddDivisionDialogOpen}>
                 <DialogContent className="sm:max-w-[500px]">
                     <DialogHeader>
@@ -1115,6 +1408,28 @@ export default function DivisionSetupPage() {
                         <DialogDescription>Create a new division with the form below.</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="divisionType" className="text-right">
+                                Division Type
+                            </Label>
+                            <Input
+                                id="divisionType"
+                                value={newDivision.divisionType}
+                                onChange={(e) => setNewDivision({ ...newDivision, divisionType: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="divisionCode" className="text-right">
+                                Division Code
+                            </Label>
+                            <Input
+                                id="divisionCode"
+                                value={newDivision.divisionCode}
+                                onChange={(e) => setNewDivision({ ...newDivision, divisionCode: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="divisionName" className="text-right">
                                 Division Name
@@ -1127,48 +1442,59 @@ export default function DivisionSetupPage() {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="location" className="text-right">
-                                Location
+                            <Label htmlFor="parentDivision" className="text-right">
+                                Parent Division
                             </Label>
                             <Input
-                                id="location"
-                                value={newDivision.location}
-                                onChange={(e) => setNewDivision({ ...newDivision, location: e.target.value })}
+                                id="parentDivision"
+                                value={newDivision.parentDivision}
+                                onChange={(e) => setNewDivision({ ...newDivision, parentDivision: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="manager" className="text-right">
-                                Manager
+                            <Label htmlFor="warehouse" className="text-right">
+                                Warehouse
                             </Label>
                             <Input
-                                id="manager"
-                                value={newDivision.manager}
-                                onChange={(e) => setNewDivision({ ...newDivision, manager: e.target.value })}
+                                id="warehouse"
+                                value={newDivision.warehouse}
+                                onChange={(e) => setNewDivision({ ...newDivision, warehouse: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="employeeCount" className="text-right">
-                                Employee Count
+                            <Label htmlFor="startDate" className="text-right">
+                                Start Date
                             </Label>
                             <Input
-                                id="employeeCount"
-                                type="number"
-                                value={newDivision.employeeCount}
-                                onChange={(e) => setNewDivision({ ...newDivision, employeeCount: e.target.value })}
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="establishedDate" className="text-right">
-                                Established Date
-                            </Label>
-                            <Input
-                                id="establishedDate"
+                                id="startDate"
                                 type="date"
-                                value={newDivision.establishedDate}
-                                onChange={(e) => setNewDivision({ ...newDivision, establishedDate: e.target.value })}
+                                value={newDivision.startDate}
+                                onChange={(e) => setNewDivision({ ...newDivision, startDate: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="endDate" className="text-right">
+                                End Date
+                            </Label>
+                            <Input
+                                id="endDate"
+                                type="date"
+                                value={newDivision.endDate}
+                                onChange={(e) => setNewDivision({ ...newDivision, endDate: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="accountedCurrency" className="text-right">
+                                Accounted Currency
+                            </Label>
+                            <Input
+                                id="accountedCurrency"
+                                value={newDivision.accountedCurrency}
+                                onChange={(e) => setNewDivision({ ...newDivision, accountedCurrency: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
@@ -1195,7 +1521,6 @@ export default function DivisionSetupPage() {
                 </DialogContent>
             </Dialog>
 
-            {/* Edit Division Dialog */}
             <Dialog open={isEditDivisionDialogOpen} onOpenChange={setIsEditDivisionDialogOpen}>
                 <DialogContent className="sm:max-w-[500px]">
                     <DialogHeader>
@@ -1203,6 +1528,28 @@ export default function DivisionSetupPage() {
                         <DialogDescription>Update the division details with the form below.</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editDivisionType" className="text-right">
+                                Division Type
+                            </Label>
+                            <Input
+                                id="editDivisionType"
+                                value={editDivision.divisionType}
+                                onChange={(e) => setEditDivision({ ...editDivision, divisionType: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editDivisionCode" className="text-right">
+                                Division Code
+                            </Label>
+                            <Input
+                                id="editDivisionCode"
+                                value={editDivision.divisionCode}
+                                onChange={(e) => setEditDivision({ ...editDivision, divisionCode: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="editDivisionName" className="text-right">
                                 Division Name
@@ -1215,48 +1562,59 @@ export default function DivisionSetupPage() {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editLocation" className="text-right">
-                                Location
+                            <Label htmlFor="editParentDivision" className="text-right">
+                                Parent Division
                             </Label>
                             <Input
-                                id="editLocation"
-                                value={editDivision.location}
-                                onChange={(e) => setEditDivision({ ...editDivision, location: e.target.value })}
+                                id="editParentDivision"
+                                value={editDivision.parentDivision}
+                                onChange={(e) => setEditDivision({ ...editDivision, parentDivision: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editManager" className="text-right">
-                                Manager
+                            <Label htmlFor="editWarehouse" className="text-right">
+                                Warehouse
                             </Label>
                             <Input
-                                id="editManager"
-                                value={editDivision.manager}
-                                onChange={(e) => setEditDivision({ ...editDivision, manager: e.target.value })}
+                                id="editWarehouse"
+                                value={editDivision.warehouse}
+                                onChange={(e) => setEditDivision({ ...editDivision, warehouse: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editEmployeeCount" className="text-right">
-                                Employee Count
+                            <Label htmlFor="editStartDate" className="text-right">
+                                Start Date
                             </Label>
                             <Input
-                                id="editEmployeeCount"
-                                type="number"
-                                value={editDivision.employeeCount}
-                                onChange={(e) => setEditDivision({ ...editDivision, employeeCount: e.target.value })}
-                                className="col-span-3"
-                            />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editEstablishedDate" className="text-right">
-                                Established Date
-                            </Label>
-                            <Input
-                                id="editEstablishedDate"
+                                id="editStartDate"
                                 type="date"
-                                value={editDivision.establishedDate}
-                                onChange={(e) => setEditDivision({ ...editDivision, establishedDate: e.target.value })}
+                                value={editDivision.startDate}
+                                onChange={(e) => setEditDivision({ ...editDivision, startDate: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editEndDate" className="text-right">
+                                End Date
+                            </Label>
+                            <Input
+                                id="editEndDate"
+                                type="date"
+                                value={editDivision.endDate}
+                                onChange={(e) => setEditDivision({ ...editDivision, endDate: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editAccountedCurrency" className="text-right">
+                                Accounted Currency
+                            </Label>
+                            <Input
+                                id="editAccountedCurrency"
+                                value={editDivision.accountedCurrency}
+                                onChange={(e) => setEditDivision({ ...editDivision, accountedCurrency: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>

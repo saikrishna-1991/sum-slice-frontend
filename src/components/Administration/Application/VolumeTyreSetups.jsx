@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 import {
     Search,
     Download,
@@ -14,15 +14,13 @@ import {
     MoreHorizontal,
     ChevronDown,
     ChevronUp,
-    BarChart3,
-    ArrowUpDown,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { useToast } from "@/hooks/use-toast"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
 import {
     Dialog,
     DialogContent,
@@ -30,10 +28,10 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -41,316 +39,353 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Badge } from "@/components/ui/badge"
-import { Card } from "@/components/ui/card"
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 // Mock volume tier data
 const volumeTierData = [
     {
         id: 1,
-        name: "Bronze Tier",
-        minVolume: 10000,
-        maxVolume: 49999,
-        discountPercentage: 5,
-        applicableDealTypes: ["Buy Deal", "Sell Deal"],
+        name: "Admin Fee",
+        tieringCriteria: "Administration Fee",
+        integrationClass: "613 MFS Rookey",
+        tierTargetValue: "Percent",
+        targetAggregation: "Purchase Cost",
+        targetDetermination: "Sum",
+        tierPeriod: "Annual",
+        periodDetermination: "Same Period",
+        tierPeriodValue: "1",
+        tierBreak: "Back to Dollar 1",
         isActive: true,
     },
     {
         id: 2,
-        name: "Silver Tier",
-        minVolume: 50000,
-        maxVolume: 99999,
-        discountPercentage: 10,
-        applicableDealTypes: ["Buy Deal", "Sell Deal", "Bulk Purchase"],
+        name: "Annual Growth",
+        tieringCriteria: "Tiered Growth",
+        integrationClass: "Buy Side Allowance",
+        tierTargetValue: "Percent",
+        targetAggregation: "Purchase Cost",
+        targetDetermination: "Sum",
+        tierPeriod: "Annual",
+        periodDetermination: "Same Period",
+        tierPeriodValue: "1",
+        tierBreak: "Back to Dollar 1",
         isActive: true,
     },
     {
         id: 3,
-        name: "Gold Tier",
-        minVolume: 100000,
-        maxVolume: 499999,
-        discountPercentage: 15,
-        applicableDealTypes: ["Buy Deal", "Sell Deal", "Bulk Purchase", "Wholesale"],
+        name: "Quarterly Rebate",
+        tieringCriteria: "Flat Rate",
+        integrationClass: "512 MFS Allowance",
+        tierTargetValue: "Dollar",
+        targetAggregation: "Sales Volume",
+        targetDetermination: "Average",
+        tierPeriod: "Quarterly",
+        periodDetermination: "Calendar Quarter",
+        tierPeriodValue: "3",
+        tierBreak: "Incremental",
         isActive: true,
     },
     {
         id: 4,
-        name: "Platinum Tier",
-        minVolume: 500000,
-        maxVolume: 999999,
-        discountPercentage: 20,
-        applicableDealTypes: ["Buy Deal", "Sell Deal", "Bulk Purchase", "Wholesale"],
-        isActive: true,
+        name: "Monthly Incentive",
+        tieringCriteria: "Stepped Rate",
+        integrationClass: "721 Sales Incentive",
+        tierTargetValue: "Units",
+        targetAggregation: "Unit Count",
+        targetDetermination: "Total",
+        tierPeriod: "Monthly",
+        periodDetermination: "Calendar Month",
+        tierPeriodValue: "1",
+        tierBreak: "Incremental",
+        isActive: false,
     },
     {
         id: 5,
-        name: "Diamond Tier",
-        minVolume: 1000000,
-        maxVolume: 9999999,
-        discountPercentage: 25,
-        applicableDealTypes: ["Buy Deal", "Sell Deal", "Bulk Purchase", "Wholesale", "Seasonal Promotion"],
-        isActive: false,
+        name: "Seasonal Promotion",
+        tieringCriteria: "Progressive",
+        integrationClass: "815 Promotion",
+        tierTargetValue: "Percent",
+        targetAggregation: "Gross Margin",
+        targetDetermination: "Weighted Average",
+        tierPeriod: "Custom",
+        periodDetermination: "Date Range",
+        tierPeriodValue: "90",
+        tierBreak: "Back to Threshold",
+        isActive: true,
     },
-]
+];
 
 // Define all available columns
 const allColumns = [
-    { id: "name", name: "Name", defaultVisible: true },
-    { id: "minVolume", name: "Min Volume", defaultVisible: true },
-    { id: "maxVolume", name: "Max Volume", defaultVisible: true },
-    { id: "discountPercentage", name: "Discount %", defaultVisible: true },
-    { id: "applicableDealTypes", name: "Applicable Deal Types", defaultVisible: true },
+    { id: "name", name: "Volume Tier Name", defaultVisible: true },
+    { id: "tieringCriteria", name: "Tiering Criteria", defaultVisible: true },
+    { id: "integrationClass", name: "Integration Class", defaultVisible: true },
+    { id: "tierTargetValue", name: "Tier Target Value", defaultVisible: true },
+    { id: "targetAggregation", name: "Target Aggregation", defaultVisible: true },
+    { id: "targetDetermination", name: "Target Determination", defaultVisible: true },
+    { id: "tierPeriod", name: "Tier Period", defaultVisible: true },
+    { id: "periodDetermination", name: "Period Determination", defaultVisible: true },
+    { id: "tierPeriodValue", name: "Tier Period Value", defaultVisible: true },
+    { id: "tierBreak", name: "Tier Break", defaultVisible: true },
     { id: "isActive", name: "Active", defaultVisible: true },
-]
+];
 
 export default function VolumeTierSetupsPage() {
-    const { toast } = useToast()
-    const [searchTerm, setSearchTerm] = useState("")
-    const [currentPage, setCurrentPage] = useState("1")
-    const [selectedVolumeTiers, setSelectedVolumeTiers] = useState([])
-    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-    const [columnFilters, setColumnFilters] = useState({})
-    const [activeFilterColumn, setActiveFilterColumn] = useState(null)
-    const [filterValue, setFilterValue] = useState("")
-    const [filterType, setFilterType] = useState("contains")
-    const [selectedVolumeTier, setSelectedVolumeTier] = useState(null)
-    const [isAddVolumeTierDialogOpen, setIsAddVolumeTierDialogOpen] = useState(false)
-    const [isEditVolumeTierDialogOpen, setIsEditVolumeTierDialogOpen] = useState(false)
-    const [isColumnSettingsOpen, setIsColumnSettingsOpen] = useState(false)
+    const { toast } = useToast();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState("1");
+    const [pageSize, setPageSize] = useState("10");
+    const [selectedVolumeTiers, setSelectedVolumeTiers] = useState([]);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [columnFilters, setColumnFilters] = useState({});
+    const [activeFilterColumn, setActiveFilterColumn] = useState(null);
+    const [filterValue, setFilterValue] = useState("");
+    const [filterType, setFilterType] = useState("contains");
+    const [isAddVolumeTierDialogOpen, setIsAddVolumeTierDialogOpen] = useState(false);
+    const [isEditVolumeTierDialogOpen, setIsEditVolumeTierDialogOpen] = useState(false);
     const [visibleColumns, setVisibleColumns] = useState(
         allColumns.filter((col) => col.defaultVisible).map((col) => col.id),
-    )
-    const [isLoading, setIsLoading] = useState(false)
-    const [sortColumn, setSortColumn] = useState(null)
-    const [sortDirection, setSortDirection] = useState("asc")
-    const [animate, setAnimate] = useState(false)
+    );
+    const [isLoading, setIsLoading] = useState(false);
+    const [sortColumn, setSortColumn] = useState(null);
+    const [sortDirection, setSortDirection] = useState("asc");
+    const [animate, setAnimate] = useState(false);
 
     // New volume tier form state
     const [newVolumeTier, setNewVolumeTier] = useState({
         name: "",
-        minVolume: "",
-        maxVolume: "",
-        discountPercentage: "",
-        applicableDealTypes: [],
+        tieringCriteria: "",
+        integrationClass: "",
+        tierTargetValue: "",
+        targetAggregation: "",
+        targetDetermination: "",
+        tierPeriod: "",
+        periodDetermination: "",
+        tierPeriodValue: "",
+        tierBreak: "",
         isActive: true,
-    })
+    });
 
     // Edit volume tier form state
     const [editVolumeTier, setEditVolumeTier] = useState({
         id: 0,
         name: "",
-        minVolume: "",
-        maxVolume: "",
-        discountPercentage: "",
-        applicableDealTypes: [],
+        tieringCriteria: "",
+        integrationClass: "",
+        tierTargetValue: "",
+        targetAggregation: "",
+        targetDetermination: "",
+        tierPeriod: "",
+        periodDetermination: "",
+        tierPeriodValue: "",
+        tierBreak: "",
         isActive: true,
-    })
-
-    // Available deal types for selection
-    const availableDealTypes = ["Buy Deal", "Sell Deal", "Bulk Purchase", "Wholesale", "Seasonal Promotion"]
+    });
 
     // Animation effect
     useEffect(() => {
-        setAnimate(true)
-    }, [])
+        setAnimate(true);
+    }, []);
 
     const handleVolumeTierSelection = (id) => {
-        setSelectedVolumeTiers((prev) => (prev.includes(id) ? prev.filter((tierId) => tierId !== id) : [...prev, id]))
-    }
+        setSelectedVolumeTiers((prev) => (prev.includes(id) ? prev.filter((tierId) => tierId !== id) : [...prev, id]));
+    };
 
     const handleSelectAll = (checked) => {
         if (checked) {
-            setSelectedVolumeTiers(filteredVolumeTiers.map((tier) => tier.id))
+            setSelectedVolumeTiers(paginatedVolumeTiers.map((tier) => tier.id));
         } else {
-            setSelectedVolumeTiers([])
+            setSelectedVolumeTiers([]);
         }
-    }
+    };
 
     const handleDeleteVolumeTiers = () => {
-        console.log("Deleting volume tiers:", selectedVolumeTiers)
+        console.log("Deleting volume tiers:", selectedVolumeTiers);
         toast({
             title: "Volume Tiers Deleted",
             description: `${selectedVolumeTiers.length} volume tier(s) have been deleted successfully.`,
-        })
-        setSelectedVolumeTiers([])
-        setIsDeleteDialogOpen(false)
-    }
+        });
+        setSelectedVolumeTiers([]);
+        setIsDeleteDialogOpen(false);
+    };
 
     const handleAddVolumeTier = () => {
-        setIsAddVolumeTierDialogOpen(true)
-    }
+        setIsAddVolumeTierDialogOpen(true);
+    };
 
     const handleEditVolumeTier = (volumeTier) => {
-        setEditVolumeTier(volumeTier)
-        setIsEditVolumeTierDialogOpen(true)
-    }
+        setEditVolumeTier(volumeTier);
+        setIsEditVolumeTierDialogOpen(true);
+    };
 
     const handleSaveNewVolumeTier = () => {
         // In a real app, you would save to the database here
         toast({
             title: "Volume Tier Added",
             description: "The volume tier has been added successfully.",
-        })
-        setIsAddVolumeTierDialogOpen(false)
+        });
+        setIsAddVolumeTierDialogOpen(false);
         setNewVolumeTier({
             name: "",
-            minVolume: "",
-            maxVolume: "",
-            discountPercentage: "",
-            applicableDealTypes: [],
+            tieringCriteria: "",
+            integrationClass: "",
+            tierTargetValue: "",
+            targetAggregation: "",
+            targetDetermination: "",
+            tierPeriod: "",
+            periodDetermination: "",
+            tierPeriodValue: "",
+            tierBreak: "",
             isActive: true,
-        })
-    }
+        });
+    };
 
     const handleSaveEditVolumeTier = () => {
         // In a real app, you would update the database here
         toast({
             title: "Volume Tier Updated",
             description: "The volume tier has been updated successfully.",
-        })
-        setIsEditVolumeTierDialogOpen(false)
-    }
+        });
+        setIsEditVolumeTierDialogOpen(false);
+    };
 
     const handleExport = () => {
         toast({
             title: "Export Started",
             description: "Your volume tier data is being exported. You'll be notified when it's ready.",
-        })
-    }
+        });
+    };
 
     const handleRefresh = () => {
-        setIsLoading(true)
+        setIsLoading(true);
         setTimeout(() => {
-            setIsLoading(false)
+            setIsLoading(false);
             toast({
                 title: "Data Refreshed",
                 description: "Volume tier data has been refreshed successfully.",
-            })
-        }, 1000)
-    }
+            });
+        }, 1000);
+    };
 
     const applyFilter = (column, type, value) => {
         setColumnFilters((prev) => ({
             ...prev,
             [column]: { type, value },
-        }))
-        setActiveFilterColumn(null)
-    }
+        }));
+        setActiveFilterColumn(null);
+    };
 
     const clearFilter = (column) => {
         setColumnFilters((prev) => {
-            const newFilters = { ...prev }
-            delete newFilters[column]
-            return newFilters
-        })
-    }
+            const newFilters = { ...prev };
+            delete newFilters[column];
+            return newFilters;
+        });
+    };
 
     const clearAllFilters = () => {
-        setColumnFilters({})
-    }
+        setColumnFilters({});
+    };
 
     const toggleColumnVisibility = (columnId) => {
-        setVisibleColumns((prev) => (prev.includes(columnId) ? prev.filter((id) => id !== columnId) : [...prev, columnId]))
-    }
+        setVisibleColumns((prev) => (prev.includes(columnId) ? prev.filter((id) => id !== columnId) : [...prev, columnId]));
+    };
 
     const resetColumnVisibility = () => {
-        setVisibleColumns(allColumns.filter((col) => col.defaultVisible).map((col) => col.id))
-    }
+        setVisibleColumns(allColumns.filter((col) => col.defaultVisible).map((col) => col.id));
+    };
 
     const handleSort = (column) => {
         if (sortColumn === column) {
-            setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+            setSortDirection(sortDirection === "asc" ? "desc" : "asc");
         } else {
-            setSortColumn(column)
-            setSortDirection("asc")
+            setSortColumn(column);
+            setSortDirection("asc");
         }
-    }
-
-    // Format currency
-    const formatCurrency = (value) => {
-        return new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 0,
-        }).format(value)
-    }
+    };
 
     // Apply filters and sorting to volume tier data
     let filteredVolumeTiers = volumeTierData.filter((volumeTier) => {
         // First apply search term
-        const matchesSearch = volumeTier.name.toLowerCase().includes(searchTerm.toLowerCase())
+        const matchesSearch = volumeTier.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-        if (!matchesSearch) return false
+        if (!matchesSearch) return false;
 
         // Apply column filters
         for (const [column, filter] of Object.entries(columnFilters)) {
-            let value = volumeTier[column]
+            let value = volumeTier[column];
 
             // Handle boolean values
             if (typeof value === "boolean") {
-                value = value ? "true" : "false"
+                value = value ? "true" : "false";
             } else if (typeof value === "number") {
-                value = value.toString()
+                value = value.toString();
             } else if (Array.isArray(value)) {
-                value = value.join(", ").toLowerCase()
+                value = value.join(", ").toLowerCase();
             } else {
-                value = (value?.toString() || "").toLowerCase()
+                value = (value?.toString() || "").toLowerCase();
             }
 
-            const filterVal = filter.value.toLowerCase()
+            const filterVal = filter.value.toLowerCase();
 
             switch (filter.type) {
                 case "equals":
-                    if (value !== filterVal) return false
-                    break
+                    if (value !== filterVal) return false;
+                    break;
                 case "notEquals":
-                    if (value === filterVal) return false
-                    break
+                    if (value === filterVal) return false;
+                    break;
                 case "beginsWith":
-                    if (!value.startsWith(filterVal)) return false
-                    break
+                    if (!value.startsWith(filterVal)) return false;
+                    break;
                 case "endsWith":
-                    if (!value.endsWith(filterVal)) return false
-                    break
+                    if (!value.endsWith(filterVal)) return false;
+                    break;
                 case "contains":
-                    if (!value.includes(filterVal)) return false
-                    break
+                    if (!value.includes(filterVal)) return false;
+                    break;
                 case "notContains":
-                    if (value.includes(filterVal)) return false
-                    break
+                    if (value.includes(filterVal)) return false;
+                    break;
                 default:
-                    break
+                    break;
             }
         }
-        return true
-    })
+        return true;
+    });
 
     // Apply sorting
     if (sortColumn) {
         filteredVolumeTiers = [...filteredVolumeTiers].sort((a, b) => {
-            let valueA = a[sortColumn]
-            let valueB = b[sortColumn]
+            let valueA = a[sortColumn];
+            let valueB = b[sortColumn];
 
             // Handle undefined values
-            if (valueA === undefined) valueA = ""
-            if (valueB === undefined) valueB = ""
+            if (valueA === undefined) valueA = "";
+            if (valueB === undefined) valueB = "";
 
             // Handle arrays
-            if (Array.isArray(valueA)) valueA = valueA.join(", ")
-            if (Array.isArray(valueB)) valueB = valueB.join(", ")
+            if (Array.isArray(valueA)) valueA = valueA.join(", ");
+            if (Array.isArray(valueB)) valueB = valueB.join(", ");
 
             // Convert to strings for comparison
-            valueA = valueA?.toString() || ""
-            valueB = valueB?.toString() || ""
+            valueA = valueA?.toString() || "";
+            valueB = valueB?.toString() || "";
 
             if (sortDirection === "asc") {
-                return valueA.localeCompare(valueB)
+                return valueA.localeCompare(valueB);
             } else {
-                return valueB.localeCompare(valueA)
+                return valueB.localeCompare(valueA);
             }
-        })
+        });
     }
+
+    // Pagination logic
+    const startIndex = (parseInt(currentPage) - 1) * parseInt(pageSize);
+    const endIndex = startIndex + parseInt(pageSize);
+    const paginatedVolumeTiers = filteredVolumeTiers.slice(startIndex, endIndex);
 
     return (
         <div className="p-6 space-y-6 flex-1">
@@ -385,16 +420,17 @@ export default function VolumeTierSetupsPage() {
 
                     <Button
                         variant="outline"
-                        className={`transition-all duration-300 ${selectedVolumeTiers.length === 0 ? "opacity-50" : "hover:bg-red-50 hover:text-red-600 hover:border-red-200"}`}
+                        className={`transition-all duration-300 ${selectedVolumeTiers.length === 0 ? "opacity-50" : "hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                            }`}
                         onClick={() => {
                             if (selectedVolumeTiers.length > 0) {
-                                setIsDeleteDialogOpen(true)
+                                setIsDeleteDialogOpen(true);
                             } else {
                                 toast({
                                     title: "No Selection",
                                     description: "Please select at least one volume tier to delete.",
                                     variant: "destructive",
-                                })
+                                });
                             }
                         }}
                     >
@@ -479,7 +515,7 @@ export default function VolumeTierSetupsPage() {
                         <TableRow>
                             <TableHead className="w-12">
                                 <Checkbox
-                                    checked={selectedVolumeTiers.length > 0 && selectedVolumeTiers.length === filteredVolumeTiers.length}
+                                    checked={selectedVolumeTiers.length > 0 && selectedVolumeTiers.length === paginatedVolumeTiers.length}
                                     onCheckedChange={handleSelectAll}
                                 />
                             </TableHead>
@@ -489,7 +525,7 @@ export default function VolumeTierSetupsPage() {
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
                                         onClick={() => handleSort("name")}
                                     >
-                                        Name
+                                        Volume Tier Name
                                         {sortColumn === "name" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
@@ -506,8 +542,8 @@ export default function VolumeTierSetupsPage() {
                                                     size="sm"
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setActiveFilterColumn("name")
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("name");
                                                     }}
                                                 >
                                                     <Filter className={`h-3 w-3 ${columnFilters.name ? "text-green-600" : ""}`} />
@@ -515,7 +551,7 @@ export default function VolumeTierSetupsPage() {
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Name</h4>
+                                                    <h4 className="font-medium">Filter Volume Tier Name</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
@@ -557,8 +593,8 @@ export default function VolumeTierSetupsPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("name", filterType, filterValue)
-                                                                setFilterValue("")
+                                                                applyFilter("name", filterType, filterValue);
+                                                                setFilterValue("");
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
                                                         >
@@ -571,21 +607,21 @@ export default function VolumeTierSetupsPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("minVolume") && (
+                            {visibleColumns.includes("tieringCriteria") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("minVolume")}
+                                        onClick={() => handleSort("tieringCriteria")}
                                     >
-                                        Min Volume
-                                        {sortColumn === "minVolume" &&
+                                        Tiering Criteria
+                                        {sortColumn === "tieringCriteria" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "minVolume"}
+                                            open={activeFilterColumn === "tieringCriteria"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -594,28 +630,28 @@ export default function VolumeTierSetupsPage() {
                                                     size="sm"
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setActiveFilterColumn("minVolume")
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("tieringCriteria");
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.minVolume ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.tieringCriteria ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Min Volume</h4>
+                                                    <h4 className="font-medium">Filter Tiering Criteria</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-minVolume" />
-                                                            <Label htmlFor="equals-minVolume">Equals</Label>
+                                                            <RadioGroupItem value="contains" id="contains-tieringCriteria" />
+                                                            <Label htmlFor="contains-tieringCriteria">Contains</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-minVolume" />
-                                                            <Label htmlFor="notEquals-minVolume">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notContains" id="notContains-tieringCriteria" />
+                                                            <Label htmlFor="notContains-tieringCriteria">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -629,8 +665,8 @@ export default function VolumeTierSetupsPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("minVolume", filterType, filterValue)
-                                                                setFilterValue("")
+                                                                applyFilter("tieringCriteria", filterType, filterValue);
+                                                                setFilterValue("");
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
                                                         >
@@ -643,21 +679,21 @@ export default function VolumeTierSetupsPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("maxVolume") && (
+                            {visibleColumns.includes("integrationClass") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("maxVolume")}
+                                        onClick={() => handleSort("integrationClass")}
                                     >
-                                        Max Volume
-                                        {sortColumn === "maxVolume" &&
+                                        Integration Class
+                                        {sortColumn === "integrationClass" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "maxVolume"}
+                                            open={activeFilterColumn === "integrationClass"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -666,28 +702,28 @@ export default function VolumeTierSetupsPage() {
                                                     size="sm"
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setActiveFilterColumn("maxVolume")
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("integrationClass");
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.maxVolume ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.integrationClass ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Max Volume</h4>
+                                                    <h4 className="font-medium">Filter Integration Class</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-maxVolume" />
-                                                            <Label htmlFor="equals-maxVolume">Equals</Label>
+                                                            <RadioGroupItem value="contains" id="contains-integrationClass" />
+                                                            <Label htmlFor="contains-integrationClass">Contains</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-maxVolume" />
-                                                            <Label htmlFor="notEquals-maxVolume">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notContains" id="notContains-integrationClass" />
+                                                            <Label htmlFor="notContains-integrationClass">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -701,8 +737,8 @@ export default function VolumeTierSetupsPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("maxVolume", filterType, filterValue)
-                                                                setFilterValue("")
+                                                                applyFilter("integrationClass", filterType, filterValue);
+                                                                setFilterValue("");
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
                                                         >
@@ -715,21 +751,21 @@ export default function VolumeTierSetupsPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("discountPercentage") && (
+                            {visibleColumns.includes("tierTargetValue") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("discountPercentage")}
+                                        onClick={() => handleSort("tierTargetValue")}
                                     >
-                                        Discount %
-                                        {sortColumn === "discountPercentage" &&
+                                        Tier Target Value
+                                        {sortColumn === "tierTargetValue" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "discountPercentage"}
+                                            open={activeFilterColumn === "tierTargetValue"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -738,28 +774,28 @@ export default function VolumeTierSetupsPage() {
                                                     size="sm"
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setActiveFilterColumn("discountPercentage")
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("tierTargetValue");
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.discountPercentage ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.tierTargetValue ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Discount Percentage</h4>
+                                                    <h4 className="font-medium">Filter Tier Target Value</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-discountPercentage" />
-                                                            <Label htmlFor="equals-discountPercentage">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-tierTargetValue" />
+                                                            <Label htmlFor="equals-tierTargetValue">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-discountPercentage" />
-                                                            <Label htmlFor="notEquals-discountPercentage">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-tierTargetValue" />
+                                                            <Label htmlFor="notEquals-tierTargetValue">Does Not Equal</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -773,8 +809,8 @@ export default function VolumeTierSetupsPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("discountPercentage", filterType, filterValue)
-                                                                setFilterValue("")
+                                                                applyFilter("tierTargetValue", filterType, filterValue);
+                                                                setFilterValue("");
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
                                                         >
@@ -787,21 +823,21 @@ export default function VolumeTierSetupsPage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("applicableDealTypes") && (
+                            {visibleColumns.includes("targetAggregation") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("applicableDealTypes")}
+                                        onClick={() => handleSort("targetAggregation")}
                                     >
-                                        Applicable Deal Types
-                                        {sortColumn === "applicableDealTypes" &&
+                                        Target Aggregation
+                                        {sortColumn === "targetAggregation" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "applicableDealTypes"}
+                                            open={activeFilterColumn === "targetAggregation"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -810,28 +846,28 @@ export default function VolumeTierSetupsPage() {
                                                     size="sm"
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setActiveFilterColumn("applicableDealTypes")
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("targetAggregation");
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.applicableDealTypes ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.targetAggregation ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Applicable Deal Types</h4>
+                                                    <h4 className="font-medium">Filter Target Aggregation</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="contains" id="contains-applicableDealTypes" />
-                                                            <Label htmlFor="contains-applicableDealTypes">Contains</Label>
+                                                            <RadioGroupItem value="contains" id="contains-targetAggregation" />
+                                                            <Label htmlFor="contains-targetAggregation">Contains</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notContains" id="notContains-applicableDealTypes" />
-                                                            <Label htmlFor="notContains-applicableDealTypes">Does Not Contain</Label>
+                                                            <RadioGroupItem value="notContains" id="notContains-targetAggregation" />
+                                                            <Label htmlFor="notContains-targetAggregation">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -845,8 +881,368 @@ export default function VolumeTierSetupsPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("applicableDealTypes", filterType, filterValue)
-                                                                setFilterValue("")
+                                                                applyFilter("targetAggregation", filterType, filterValue);
+                                                                setFilterValue("");
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("targetDetermination") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("targetDetermination")}
+                                    >
+                                        Target Determination
+                                        {sortColumn === "targetDetermination" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "targetDetermination"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("targetDetermination");
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.targetDetermination ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Target Determination</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-targetDetermination" />
+                                                            <Label htmlFor="contains-targetDetermination">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-targetDetermination" />
+                                                            <Label htmlFor="notContains-targetDetermination">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("targetDetermination", filterType, filterValue);
+                                                                setFilterValue("");
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("tierPeriod") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("tierPeriod")}
+                                    >
+                                        Tier Period
+                                        {sortColumn === "tierPeriod" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "tierPeriod"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("tierPeriod");
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.tierPeriod ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Tier Period</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-tierPeriod" />
+                                                            <Label htmlFor="equals-tierPeriod">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-tierPeriod" />
+                                                            <Label htmlFor="notEquals-tierPeriod">Does Not Equal</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("tierPeriod", filterType, filterValue);
+                                                                setFilterValue("");
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("periodDetermination") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("periodDetermination")}
+                                    >
+                                        Period Determination
+                                        {sortColumn === "periodDetermination" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "periodDetermination"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("periodDetermination");
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.periodDetermination ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Period Determination</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-periodDetermination" />
+                                                            <Label htmlFor="contains-periodDetermination">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-periodDetermination" />
+                                                            <Label htmlFor="notContains-periodDetermination">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("periodDetermination", filterType, filterValue);
+                                                                setFilterValue("");
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("tierPeriodValue") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("tierPeriodValue")}
+                                    >
+                                        Tier Period Value
+                                        {sortColumn === "tierPeriodValue" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "tierPeriodValue"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("tierPeriodValue");
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.tierPeriodValue ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Tier Period Value</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-tierPeriodValue" />
+                                                            <Label htmlFor="equals-tierPeriodValue">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-tierPeriodValue" />
+                                                            <Label htmlFor="notEquals-tierPeriodValue">Does Not Equal</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("tierPeriodValue", filterType, filterValue);
+                                                                setFilterValue("");
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("tierBreak") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("tierBreak")}
+                                    >
+                                        Tier Break
+                                        {sortColumn === "tierBreak" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "tierBreak"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("tierBreak");
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.tierBreak ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Tier Break</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-tierBreak" />
+                                                            <Label htmlFor="contains-tierBreak">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-tierBreak" />
+                                                            <Label htmlFor="notContains-tierBreak">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("tierBreak", filterType, filterValue);
+                                                                setFilterValue("");
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
                                                         >
@@ -882,8 +1278,8 @@ export default function VolumeTierSetupsPage() {
                                                     size="sm"
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        setActiveFilterColumn("isActive")
+                                                        e.stopPropagation();
+                                                        setActiveFilterColumn("isActive");
                                                     }}
                                                 >
                                                     <Filter className={`h-3 w-3 ${columnFilters.isActive ? "text-green-600" : ""}`} />
@@ -921,8 +1317,8 @@ export default function VolumeTierSetupsPage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("isActive", filterType, filterValue)
-                                                                setFilterValue("")
+                                                                applyFilter("isActive", filterType, filterValue);
+                                                                setFilterValue("");
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
                                                         >
@@ -941,8 +1337,8 @@ export default function VolumeTierSetupsPage() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {filteredVolumeTiers.length > 0 ? (
-                            filteredVolumeTiers.map((volumeTier) => (
+                        {paginatedVolumeTiers.length > 0 ? (
+                            paginatedVolumeTiers.map((volumeTier) => (
                                 <TableRow key={volumeTier.id} className="hover:bg-gray-50 transition-colors">
                                     <TableCell>
                                         <Checkbox
@@ -960,40 +1356,32 @@ export default function VolumeTierSetupsPage() {
                                             </button>
                                         </TableCell>
                                     )}
-                                    {visibleColumns.includes("minVolume") && (
-                                        <TableCell>
-                                            <div className="flex items-center">
-                                                <ArrowUpDown className="h-4 w-4 text-gray-400 mr-1" />
-                                                {formatCurrency(volumeTier.minVolume)}
-                                            </div>
-                                        </TableCell>
+                                    {visibleColumns.includes("tieringCriteria") && (
+                                        <TableCell>{volumeTier.tieringCriteria}</TableCell>
                                     )}
-                                    {visibleColumns.includes("maxVolume") && (
-                                        <TableCell>
-                                            <div className="flex items-center">
-                                                <ArrowUpDown className="h-4 w-4 text-gray-400 mr-1" />
-                                                {formatCurrency(volumeTier.maxVolume)}
-                                            </div>
-                                        </TableCell>
+                                    {visibleColumns.includes("integrationClass") && (
+                                        <TableCell>{volumeTier.integrationClass}</TableCell>
                                     )}
-                                    {visibleColumns.includes("discountPercentage") && (
-                                        <TableCell>
-                                            <div className="flex items-center">
-                                                <BarChart3 className="h-4 w-4 text-gray-400 mr-1" />
-                                                {volumeTier.discountPercentage}%
-                                            </div>
-                                        </TableCell>
+                                    {visibleColumns.includes("tierTargetValue") && (
+                                        <TableCell>{volumeTier.tierTargetValue}</TableCell>
                                     )}
-                                    {visibleColumns.includes("applicableDealTypes") && (
-                                        <TableCell>
-                                            <div className="flex flex-wrap gap-1">
-                                                {volumeTier.applicableDealTypes.map((dealType) => (
-                                                    <Badge key={dealType} variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                                                        {dealType}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-                                        </TableCell>
+                                    {visibleColumns.includes("targetAggregation") && (
+                                        <TableCell>{volumeTier.targetAggregation}</TableCell>
+                                    )}
+                                    {visibleColumns.includes("targetDetermination") && (
+                                        <TableCell>{volumeTier.targetDetermination}</TableCell>
+                                    )}
+                                    {visibleColumns.includes("tierPeriod") && (
+                                        <TableCell>{volumeTier.tierPeriod}</TableCell>
+                                    )}
+                                    {visibleColumns.includes("periodDetermination") && (
+                                        <TableCell>{volumeTier.periodDetermination}</TableCell>
+                                    )}
+                                    {visibleColumns.includes("tierPeriodValue") && (
+                                        <TableCell>{volumeTier.tierPeriodValue}</TableCell>
+                                    )}
+                                    {visibleColumns.includes("tierBreak") && (
+                                        <TableCell>{volumeTier.tierBreak}</TableCell>
                                     )}
                                     {visibleColumns.includes("isActive") && (
                                         <TableCell>
@@ -1046,7 +1434,13 @@ export default function VolumeTierSetupsPage() {
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-4">
                 <div className="flex items-center gap-2">
                     <span>Show</span>
-                    <Select defaultValue="10">
+                    <Select
+                        value={pageSize}
+                        onValueChange={(value) => {
+                            setPageSize(value);
+                            setCurrentPage("1"); // Reset to first page when page size changes
+                        }}
+                    >
                         <SelectTrigger className="w-20">
                             <SelectValue />
                         </SelectTrigger>
@@ -1065,21 +1459,24 @@ export default function VolumeTierSetupsPage() {
                         className="w-16"
                         value={currentPage}
                         onChange={(e) => {
-                            const value = e.target.value
+                            const value = e.target.value;
                             if (/^\d*$/.test(value)) {
-                                setCurrentPage(value)
+                                setCurrentPage(value || "1"); // Default to "1" if empty
                             }
                         }}
                     />
-                    <span>of {Math.max(1, Math.ceil(filteredVolumeTiers.length / 10))}</span>
+                    <span>of {Math.max(1, Math.ceil(filteredVolumeTiers.length / parseInt(pageSize)))}</span>
                     <span>
-                        Displaying {filteredVolumeTiers.length > 0 ? `1 - ${Math.min(filteredVolumeTiers.length, 10)}` : "0"} of{" "}
-                        {filteredVolumeTiers.length}
+                        Displaying{" "}
+                        {paginatedVolumeTiers.length > 0
+                            ? `${startIndex + 1} - ${Math.min(startIndex + paginatedVolumeTiers.length, filteredVolumeTiers.length)}`
+                            : "0"}{" "}
+                        of {filteredVolumeTiers.length}
                     </span>
                 </div>
             </div>
 
-            {/* Delete Confirmation Dialog */}
+            {/* Delete Dialog */}
             <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -1103,85 +1500,129 @@ export default function VolumeTierSetupsPage() {
             <Dialog open={isAddVolumeTierDialogOpen} onOpenChange={setIsAddVolumeTierDialogOpen}>
                 <DialogContent className="sm:max-w-[500px]">
                     <DialogHeader>
-                        <DialogTitle>Add New Volume Tier</DialogTitle>
+                        <DialogTitle>Volume Tier Setup</DialogTitle>
                         <DialogDescription>Create a new volume tier with the form below.</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">
-                                Name
+                                Volume Tier Name
                             </Label>
                             <Input
                                 id="name"
                                 value={newVolumeTier.name}
                                 onChange={(e) => setNewVolumeTier({ ...newVolumeTier, name: e.target.value })}
                                 className="col-span-3"
+                                placeholder="Annual Growth"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="minVolume" className="text-right">
-                                Min Volume
+                            <Label htmlFor="tieringCriteria" className="text-right">
+                                Tiering Criteria
                             </Label>
                             <Input
-                                id="minVolume"
-                                type="number"
-                                value={newVolumeTier.minVolume}
-                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, minVolume: e.target.value })}
+                                id="tieringCriteria"
+                                value={newVolumeTier.tieringCriteria}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, tieringCriteria: e.target.value })}
                                 className="col-span-3"
+                                placeholder="Tiered Growth"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="maxVolume" className="text-right">
-                                Max Volume
+                            <Label htmlFor="integrationClass" className="text-right">
+                                Integration Class
                             </Label>
                             <Input
-                                id="maxVolume"
-                                type="number"
-                                value={newVolumeTier.maxVolume}
-                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, maxVolume: e.target.value })}
+                                id="integrationClass"
+                                value={newVolumeTier.integrationClass}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, integrationClass: e.target.value })}
                                 className="col-span-3"
+                                placeholder="Buy Side Allowance"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="discountPercentage" className="text-right">
-                                Discount %
+                            <Label htmlFor="tierTargetValue" className="text-right">
+                                Tier Target Value
                             </Label>
                             <Input
-                                id="discountPercentage"
-                                type="number"
-                                value={newVolumeTier.discountPercentage}
-                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, discountPercentage: e.target.value })}
+                                id="tierTargetValue"
+                                value={newVolumeTier.tierTargetValue}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, tierTargetValue: e.target.value })}
                                 className="col-span-3"
+                                placeholder="Percent"
                             />
                         </div>
-                        <div className="grid grid-cols-4 items-start gap-4">
-                            <Label htmlFor="applicableDealTypes" className="text-right pt-2">
-                                Applicable Deal Types
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="targetAggregation" className="text-right">
+                                Target Aggregation
                             </Label>
-                            <div className="col-span-3 space-y-2">
-                                {availableDealTypes.map((dealType) => (
-                                    <div key={dealType} className="flex items-center gap-2">
-                                        <Checkbox
-                                            id={`dealType-${dealType}`}
-                                            checked={newVolumeTier.applicableDealTypes.includes(dealType)}
-                                            onCheckedChange={(checked) => {
-                                                if (checked) {
-                                                    setNewVolumeTier({
-                                                        ...newVolumeTier,
-                                                        applicableDealTypes: [...newVolumeTier.applicableDealTypes, dealType],
-                                                    })
-                                                } else {
-                                                    setNewVolumeTier({
-                                                        ...newVolumeTier,
-                                                        applicableDealTypes: newVolumeTier.applicableDealTypes.filter((type) => type !== dealType),
-                                                    })
-                                                }
-                                            }}
-                                        />
-                                        <Label htmlFor={`dealType-${dealType}`}>{dealType}</Label>
-                                    </div>
-                                ))}
-                            </div>
+                            <Input
+                                id="targetAggregation"
+                                value={newVolumeTier.targetAggregation}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, targetAggregation: e.target.value })}
+                                className="col-span-3"
+                                placeholder="Purchase Cost"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="targetDetermination" className="text-right">
+                                Target Determination
+                            </Label>
+                            <Input
+                                id="targetDetermination"
+                                value={newVolumeTier.targetDetermination}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, targetDetermination: e.target.value })}
+                                className="col-span-3"
+                                placeholder="Sum"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="tierPeriod" className="text-right">
+                                Tier Period
+                            </Label>
+                            <Input
+                                id="tierPeriod"
+                                value={newVolumeTier.tierPeriod}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, tierPeriod: e.target.value })}
+                                className="col-span-3"
+                                placeholder="Annual"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="periodDetermination" className="text-right">
+                                Period Determination
+                            </Label>
+                            <Input
+                                id="periodDetermination"
+                                value={newVolumeTier.periodDetermination}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, periodDetermination: e.target.value })}
+                                className="col-span-3"
+                                placeholder="Same Period"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="tierPeriodValue" className="text-right">
+                                Tier Period Value
+                            </Label>
+                            <Input
+                                id="tierPeriodValue"
+                                value={newVolumeTier.tierPeriodValue}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, tierPeriodValue: e.target.value })}
+                                className="col-span-3"
+                                placeholder="1"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="tierBreak" className="text-right">
+                                Tier Break
+                            </Label>
+                            <Input
+                                id="tierBreak"
+                                value={newVolumeTier.tierBreak}
+                                onChange={(e) => setNewVolumeTier({ ...newVolumeTier, tierBreak: e.target.value })}
+                                className="col-span-3"
+                                placeholder="Back to Dollar 1"
+                            />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <div className="text-right">Status</div>
@@ -1197,7 +1638,7 @@ export default function VolumeTierSetupsPage() {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsAddVolumeTierDialogOpen(false)}>
-                            Cancel
+                            Reset
                         </Button>
                         <Button onClick={handleSaveNewVolumeTier} className="bg-green-600 hover:bg-green-700">
                             Save
@@ -1210,13 +1651,13 @@ export default function VolumeTierSetupsPage() {
             <Dialog open={isEditVolumeTierDialogOpen} onOpenChange={setIsEditVolumeTierDialogOpen}>
                 <DialogContent className="sm:max-w-[500px]">
                     <DialogHeader>
-                        <DialogTitle>Edit Volume Tier</DialogTitle>
+                        <DialogTitle>Volume Tier Setup</DialogTitle>
                         <DialogDescription>Update the volume tier details with the form below.</DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="editName" className="text-right">
-                                Name
+                                Volume Tier Name
                             </Label>
                             <Input
                                 id="editName"
@@ -1226,69 +1667,103 @@ export default function VolumeTierSetupsPage() {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editMinVolume" className="text-right">
-                                Min Volume
+                            <Label htmlFor="editTieringCriteria" className="text-right">
+                                Tiering Criteria
                             </Label>
                             <Input
-                                id="editMinVolume"
-                                type="number"
-                                value={editVolumeTier.minVolume}
-                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, minVolume: e.target.value })}
+                                id="editTieringCriteria"
+                                value={editVolumeTier.tieringCriteria}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, tieringCriteria: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editMaxVolume" className="text-right">
-                                Max Volume
+                            <Label htmlFor="editIntegrationClass" className="text-right">
+                                Integration Class
                             </Label>
                             <Input
-                                id="editMaxVolume"
-                                type="number"
-                                value={editVolumeTier.maxVolume}
-                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, maxVolume: e.target.value })}
+                                id="editIntegrationClass"
+                                value={editVolumeTier.integrationClass}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, integrationClass: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editDiscountPercentage" className="text-right">
-                                Discount %
+                            <Label htmlFor="editTierTargetValue" className="text-right">
+                                Tier Target Value
                             </Label>
                             <Input
-                                id="editDiscountPercentage"
-                                type="number"
-                                value={editVolumeTier.discountPercentage}
-                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, discountPercentage: e.target.value })}
+                                id="editTierTargetValue"
+                                value={editVolumeTier.tierTargetValue}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, tierTargetValue: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
-                        <div className="grid grid-cols-4 items-start gap-4">
-                            <Label htmlFor="editApplicableDealTypes" className="text-right pt-2">
-                                Applicable Deal Types
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editTargetAggregation" className="text-right">
+                                Target Aggregation
                             </Label>
-                            <div className="col-span-3 space-y-2">
-                                {availableDealTypes.map((dealType) => (
-                                    <div key={dealType} className="flex items-center gap-2">
-                                        <Checkbox
-                                            id={`editDealType-${dealType}`}
-                                            checked={editVolumeTier.applicableDealTypes.includes(dealType)}
-                                            onCheckedChange={(checked) => {
-                                                if (checked) {
-                                                    setEditVolumeTier({
-                                                        ...editVolumeTier,
-                                                        applicableDealTypes: [...editVolumeTier.applicableDealTypes, dealType],
-                                                    })
-                                                } else {
-                                                    setEditVolumeTier({
-                                                        ...editVolumeTier,
-                                                        applicableDealTypes: editVolumeTier.applicableDealTypes.filter((type) => type !== dealType),
-                                                    })
-                                                }
-                                            }}
-                                        />
-                                        <Label htmlFor={`editDealType-${dealType}`}>{dealType}</Label>
-                                    </div>
-                                ))}
-                            </div>
+                            <Input
+                                id="editTargetAggregation"
+                                value={editVolumeTier.targetAggregation}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, targetAggregation: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editTargetDetermination" className="text-right">
+                                Target Determination
+                            </Label>
+                            <Input
+                                id="editTargetDetermination"
+                                value={editVolumeTier.targetDetermination}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, targetDetermination: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editTierPeriod" className="text-right">
+                                Tier Period
+                            </Label>
+                            <Input
+                                id="editTierPeriod"
+                                value={editVolumeTier.tierPeriod}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, tierPeriod: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editPeriodDetermination" className="text-right">
+                                Period Determination
+                            </Label>
+                            <Input
+                                id="editPeriodDetermination"
+                                value={editVolumeTier.periodDetermination}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, periodDetermination: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editTierPeriodValue" className="text-right">
+                                Tier Period Value
+                            </Label>
+                            <Input
+                                id="editTierPeriodValue"
+                                value={editVolumeTier.tierPeriodValue}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, tierPeriodValue: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editTierBreak" className="text-right">
+                                Tier Break
+                            </Label>
+                            <Input
+                                id="editTierBreak"
+                                value={editVolumeTier.tierBreak}
+                                onChange={(e) => setEditVolumeTier({ ...editVolumeTier, tierBreak: e.target.value })}
+                                className="col-span-3"
+                            />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <div className="text-right">Status</div>
@@ -1304,7 +1779,7 @@ export default function VolumeTierSetupsPage() {
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setIsEditVolumeTierDialogOpen(false)}>
-                            Cancel
+                            Reset
                         </Button>
                         <Button onClick={handleSaveEditVolumeTier} className="bg-green-600 hover:bg-green-700">
                             Save Changes
@@ -1313,5 +1788,5 @@ export default function VolumeTierSetupsPage() {
                 </DialogContent>
             </Dialog>
         </div>
-    )
+    );
 }

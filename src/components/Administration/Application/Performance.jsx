@@ -10,12 +10,10 @@ import {
     RefreshCw,
     X,
     Settings,
-    BarChart,
+    Calendar,
     MoreHorizontal,
     ChevronDown,
     ChevronUp,
-    Calendar,
-    TrendingUp,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,68 +43,77 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 
-// Mock performance data
+// Mock performance data based on the image
 const performanceData = [
     {
         id: 1,
-        name: "Easter",
-        startDate: "2025-04-01",
-        endDate: "2025-04-30",
-        targetValue: 500000,
-        actualValue: 520000,
-        status: "Completed",
+        name: "Admin Fee",
+        dealType: "Administration Fee",
+        division: "613 MFS Rockey",
+        startDate: "2025-05-01",
+        endDate: "2025-05-31",
+        startDay: "Monday",
+        endDay: "Friday",
         isActive: true,
     },
     {
         id: 2,
-        name: "Thanksgiving",
-        startDate: "2025-11-01",
-        endDate: "2025-11-30",
-        targetValue: 750000,
-        actualValue: 0,
-        status: "Upcoming",
+        name: "DSA Fee",
+        dealType: "Dealer Service Agreement",
+        division: "602 MFS Denver",
+        startDate: "2025-04-01",
+        endDate: "2025-04-30",
+        startDay: "Tuesday",
+        endDay: "Saturday",
         isActive: true,
     },
     {
         id: 3,
-        name: "Summer Sale",
-        startDate: "2025-07-01",
-        endDate: "2025-08-31",
-        targetValue: 1000000,
-        actualValue: 0,
-        status: "Upcoming",
-        isActive: true,
+        name: "Late Fee",
+        dealType: "Penalty Fee",
+        division: "601 MFS Phoenix",
+        startDate: "2025-06-01",
+        endDate: "2025-06-30",
+        startDay: "Wednesday",
+        endDay: "Sunday",
+        isActive: false,
     },
     {
         id: 4,
-        name: "Black Friday",
-        startDate: "2025-11-25",
-        endDate: "2025-11-29",
-        targetValue: 1500000,
-        actualValue: 0,
-        status: "Upcoming",
+        name: "Processing Fee",
+        dealType: "Operational Fee",
+        division: "605 MFS Dallas",
+        startDate: "2025-05-15",
+        endDate: "2025-06-15",
+        startDay: "Thursday",
+        endDay: "Monday",
         isActive: true,
     },
     {
         id: 5,
-        name: "Christmas",
-        startDate: "2025-12-01",
-        endDate: "2025-12-25",
-        targetValue: 2000000,
-        actualValue: 0,
-        status: "Upcoming",
-        isActive: true,
+        name: "Subscription Fee",
+        dealType: "Recurring Fee",
+        division: "604 MFS Seattle",
+        startDate: "2025-03-01",
+        endDate: "2025-03-31",
+        startDay: "Friday",
+        endDay: "Wednesday",
+        isActive: false,
     },
-]
+];
 
-// Define all available columns
+
+// Define all available columns based on the image
 const allColumns = [
     { id: "name", name: "Name", defaultVisible: true },
+    { id: "dealType", name: "Deal Type", defaultVisible: true },
+    { id: "division", name: "Division", defaultVisible: true },
     { id: "startDate", name: "Start Date", defaultVisible: true },
     { id: "endDate", name: "End Date", defaultVisible: true },
-    { id: "targetValue", name: "Target Value", defaultVisible: true },
-    { id: "actualValue", name: "Actual Value", defaultVisible: true },
-    { id: "status", name: "Status", defaultVisible: true },
+    // { id: "startDate2", name: "Start Date 2", defaultVisible: true }, // Duplicate column
+    // { id: "endDate2", name: "End Date 2", defaultVisible: true },     // Duplicate column
+    { id: "startDay", name: "Start Day", defaultVisible: true },
+    { id: "endDay", name: "End Day", defaultVisible: true },
     { id: "isActive", name: "Active", defaultVisible: true },
 ]
 
@@ -135,11 +142,14 @@ export default function PerformancePage() {
     // New performance form state
     const [newPerformance, setNewPerformance] = useState({
         name: "",
+        dealType: "",
+        division: "",
         startDate: "",
         endDate: "",
-        targetValue: "",
-        actualValue: "0",
-        status: "Upcoming",
+        // startDate2: "",
+        // endDate2: "",
+        startDay: "",
+        endDay: "",
         isActive: true,
     })
 
@@ -147,11 +157,14 @@ export default function PerformancePage() {
     const [editPerformance, setEditPerformance] = useState({
         id: 0,
         name: "",
+        dealType: "",
+        division: "",
         startDate: "",
         endDate: "",
-        targetValue: "",
-        actualValue: "",
-        status: "",
+        // startDate2: "",
+        // endDate2: "",
+        startDay: "",
+        endDay: "",
         isActive: true,
     })
 
@@ -192,7 +205,6 @@ export default function PerformancePage() {
     }
 
     const handleSaveNewPerformance = () => {
-        // In a real app, you would save to the database here
         toast({
             title: "Performance Added",
             description: "The performance has been added successfully.",
@@ -200,17 +212,19 @@ export default function PerformancePage() {
         setIsAddPerformanceDialogOpen(false)
         setNewPerformance({
             name: "",
+            dealType: "",
+            division: "",
             startDate: "",
             endDate: "",
-            targetValue: "",
-            actualValue: "0",
-            status: "Upcoming",
+            // startDate2: "",
+            // endDate2: "",
+            startDay: "",
+            endDay: "",
             isActive: true,
         })
     }
 
     const handleSaveEditPerformance = () => {
-        // In a real app, you would update the database here
         toast({
             title: "Performance Updated",
             description: "The performance has been updated successfully.",
@@ -273,31 +287,26 @@ export default function PerformancePage() {
         }
     }
 
-    // Format currency
-    const formatCurrency = (value) => {
-        return new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-            minimumFractionDigits: 0,
-        }).format(value)
-    }
-
     // Apply filters and sorting to performance data
     let filteredPerformances = performanceData.filter((performance) => {
-        // First apply search term
-        const matchesSearch = performance.name.toLowerCase().includes(searchTerm.toLowerCase())
+        const matchesSearch =
+            performance.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            performance.dealType.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            performance.division.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            performance.startDate.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            performance.endDate.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            // performance.startDate2.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            // performance.endDate2.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            performance.startDay.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            performance.endDay.toLowerCase().includes(searchTerm.toLowerCase())
 
         if (!matchesSearch) return false
 
-        // Apply column filters
         for (const [column, filter] of Object.entries(columnFilters)) {
             let value = performance[column]
 
-            // Handle boolean values
             if (typeof value === "boolean") {
                 value = value ? "true" : "false"
-            } else if (typeof value === "number") {
-                value = value.toString()
             } else {
                 value = (value?.toString() || "").toLowerCase()
             }
@@ -330,17 +339,14 @@ export default function PerformancePage() {
         return true
     })
 
-    // Apply sorting
     if (sortColumn) {
         filteredPerformances = [...filteredPerformances].sort((a, b) => {
             let valueA = a[sortColumn]
             let valueB = b[sortColumn]
 
-            // Handle undefined values
             if (valueA === undefined) valueA = ""
             if (valueB === undefined) valueB = ""
 
-            // Convert to strings for comparison
             valueA = valueA?.toString() || ""
             valueB = valueB?.toString() || ""
 
@@ -573,6 +579,182 @@ export default function PerformancePage() {
                                     </div>
                                 </TableHead>
                             )}
+                            {visibleColumns.includes("dealType") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("dealType")}
+                                    >
+                                        Deal Type
+                                        {sortColumn === "dealType" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "dealType"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setActiveFilterColumn("dealType")
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.dealType ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Deal Type</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-dealType" />
+                                                            <Label htmlFor="equals-dealType">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-dealType" />
+                                                            <Label htmlFor="notEquals-dealType">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-dealType" />
+                                                            <Label htmlFor="beginsWith-dealType">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-dealType" />
+                                                            <Label htmlFor="endsWith-dealType">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-dealType" />
+                                                            <Label htmlFor="contains-dealType">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-dealType" />
+                                                            <Label htmlFor="notContains-dealType">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("dealType", filterType, filterValue)
+                                                                setFilterValue("")
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
+                            {visibleColumns.includes("division") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("division")}
+                                    >
+                                        Division
+                                        {sortColumn === "division" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "division"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setActiveFilterColumn("division")
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.division ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Division</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-division" />
+                                                            <Label htmlFor="equals-division">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-division" />
+                                                            <Label htmlFor="notEquals-division">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-division" />
+                                                            <Label htmlFor="beginsWith-division">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-division" />
+                                                            <Label htmlFor="endsWith-division">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-division" />
+                                                            <Label htmlFor="contains-division">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-division" />
+                                                            <Label htmlFor="notContains-division">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("division", filterType, filterValue)
+                                                                setFilterValue("")
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )}
                             {visibleColumns.includes("startDate") && (
                                 <TableHead>
                                     <div
@@ -749,21 +931,21 @@ export default function PerformancePage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("targetValue") && (
+                            {/* {visibleColumns.includes("startDate2") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("targetValue")}
+                                        onClick={() => handleSort("startDate2")}
                                     >
-                                        Target Value
-                                        {sortColumn === "targetValue" &&
+                                        Start Date 2
+                                        {sortColumn === "startDate2" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "targetValue"}
+                                            open={activeFilterColumn === "startDate2"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -773,27 +955,43 @@ export default function PerformancePage() {
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setActiveFilterColumn("targetValue")
+                                                        setActiveFilterColumn("startDate2")
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.targetValue ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.startDate2 ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Target Value</h4>
+                                                    <h4 className="font-medium">Filter Start Date 2</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-targetValue" />
-                                                            <Label htmlFor="equals-targetValue">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-startDate2" />
+                                                            <Label htmlFor="equals-startDate2">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-targetValue" />
-                                                            <Label htmlFor="notEquals-targetValue">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-startDate2" />
+                                                            <Label htmlFor="notEquals-startDate2">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-startDate2" />
+                                                            <Label htmlFor="beginsWith-startDate2">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-startDate2" />
+                                                            <Label htmlFor="endsWith-startDate2">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-startDate2" />
+                                                            <Label htmlFor="contains-startDate2">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-startDate2" />
+                                                            <Label htmlFor="notContains-startDate2">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -807,7 +1005,7 @@ export default function PerformancePage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("targetValue", filterType, filterValue)
+                                                                applyFilter("startDate2", filterType, filterValue)
                                                                 setFilterValue("")
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
@@ -821,21 +1019,21 @@ export default function PerformancePage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("actualValue") && (
+                            {visibleColumns.includes("endDate2") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("actualValue")}
+                                        onClick={() => handleSort("endDate2")}
                                     >
-                                        Actual Value
-                                        {sortColumn === "actualValue" &&
+                                        End Date 2
+                                        {sortColumn === "endDate2" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "actualValue"}
+                                            open={activeFilterColumn === "endDate2"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -845,27 +1043,43 @@ export default function PerformancePage() {
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setActiveFilterColumn("actualValue")
+                                                        setActiveFilterColumn("endDate2")
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.actualValue ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.endDate2 ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Actual Value</h4>
+                                                    <h4 className="font-medium">Filter End Date 2</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-actualValue" />
-                                                            <Label htmlFor="equals-actualValue">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-endDate2" />
+                                                            <Label htmlFor="equals-endDate2">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-actualValue" />
-                                                            <Label htmlFor="notEquals-actualValue">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-endDate2" />
+                                                            <Label htmlFor="notEquals-endDate2">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-endDate2" />
+                                                            <Label htmlFor="beginsWith-endDate2">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-endDate2" />
+                                                            <Label htmlFor="endsWith-endDate2">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-endDate2" />
+                                                            <Label htmlFor="contains-endDate2">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-endDate2" />
+                                                            <Label htmlFor="notContains-endDate2">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
                                                     <Input
@@ -879,7 +1093,95 @@ export default function PerformancePage() {
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("actualValue", filterType, filterValue)
+                                                                applyFilter("endDate2", filterType, filterValue)
+                                                                setFilterValue("")
+                                                            }}
+                                                            className="bg-green-600 hover:bg-green-700"
+                                                        >
+                                                            Apply Filter
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
+                                </TableHead>
+                            )} */}
+                            {visibleColumns.includes("startDay") && (
+                                <TableHead>
+                                    <div
+                                        className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                        onClick={() => handleSort("startDay")}
+                                    >
+                                        Start Day
+                                        {sortColumn === "startDay" &&
+                                            (sortDirection === "asc" ? (
+                                                <ChevronUp className="h-4 w-4" />
+                                            ) : (
+                                                <ChevronDown className="h-4 w-4" />
+                                            ))}
+                                        <Popover
+                                            open={activeFilterColumn === "startDay"}
+                                            onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                        >
+                                            <PopoverTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="h-6 w-6 p-0 ml-1"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        setActiveFilterColumn("startDay")
+                                                    }}
+                                                >
+                                                    <Filter className={`h-3 w-3 ${columnFilters.startDay ? "text-green-600" : ""}`} />
+                                                </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-80">
+                                                <div className="space-y-4">
+                                                    <h4 className="font-medium">Filter Start Day</h4>
+                                                    <RadioGroup
+                                                        defaultValue={filterType}
+                                                        onValueChange={setFilterType}
+                                                        className="grid grid-cols-2 gap-2"
+                                                    >
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="equals" id="equals-startDay" />
+                                                            <Label htmlFor="equals-startDay">Equals</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notEquals" id="notEquals-startDay" />
+                                                            <Label htmlFor="notEquals-startDay">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-startDay" />
+                                                            <Label htmlFor="beginsWith-startDay">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-startDay" />
+                                                            <Label htmlFor="endsWith-startDay">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-startDay" />
+                                                            <Label htmlFor="contains-startDay">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-startDay" />
+                                                            <Label htmlFor="notContains-startDay">Does Not Contain</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
+                                                    <div className="flex justify-between">
+                                                        <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                            Cancel
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => {
+                                                                applyFilter("startDay", filterType, filterValue)
                                                                 setFilterValue("")
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
@@ -893,21 +1195,21 @@ export default function PerformancePage() {
                                     </div>
                                 </TableHead>
                             )}
-                            {visibleColumns.includes("status") && (
+                            {visibleColumns.includes("endDay") && (
                                 <TableHead>
                                     <div
                                         className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                        onClick={() => handleSort("status")}
+                                        onClick={() => handleSort("endDay")}
                                     >
-                                        Status
-                                        {sortColumn === "status" &&
+                                        End Day
+                                        {sortColumn === "endDay" &&
                                             (sortDirection === "asc" ? (
                                                 <ChevronUp className="h-4 w-4" />
                                             ) : (
                                                 <ChevronDown className="h-4 w-4" />
                                             ))}
                                         <Popover
-                                            open={activeFilterColumn === "status"}
+                                            open={activeFilterColumn === "endDay"}
                                             onOpenChange={(open) => !open && setActiveFilterColumn(null)}
                                         >
                                             <PopoverTrigger asChild>
@@ -917,46 +1219,57 @@ export default function PerformancePage() {
                                                     className="h-6 w-6 p-0 ml-1"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        setActiveFilterColumn("status")
+                                                        setActiveFilterColumn("endDay")
                                                     }}
                                                 >
-                                                    <Filter className={`h-3 w-3 ${columnFilters.status ? "text-green-600" : ""}`} />
+                                                    <Filter className={`h-3 w-3 ${columnFilters.endDay ? "text-green-600" : ""}`} />
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className="w-80">
                                                 <div className="space-y-4">
-                                                    <h4 className="font-medium">Filter Status</h4>
+                                                    <h4 className="font-medium">Filter End Day</h4>
                                                     <RadioGroup
                                                         defaultValue={filterType}
                                                         onValueChange={setFilterType}
                                                         className="grid grid-cols-2 gap-2"
                                                     >
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="equals" id="equals-status" />
-                                                            <Label htmlFor="equals-status">Equals</Label>
+                                                            <RadioGroupItem value="equals" id="equals-endDay" />
+                                                            <Label htmlFor="equals-endDay">Equals</Label>
                                                         </div>
                                                         <div className="flex items-center space-x-2">
-                                                            <RadioGroupItem value="notEquals" id="notEquals-status" />
-                                                            <Label htmlFor="notEquals-status">Does Not Equal</Label>
+                                                            <RadioGroupItem value="notEquals" id="notEquals-endDay" />
+                                                            <Label htmlFor="notEquals-endDay">Does Not Equal</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="beginsWith" id="beginsWith-endDay" />
+                                                            <Label htmlFor="beginsWith-endDay">Begins With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="endsWith" id="endsWith-endDay" />
+                                                            <Label htmlFor="endsWith-endDay">Ends With</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="contains" id="contains-endDay" />
+                                                            <Label htmlFor="contains-endDay">Contains</Label>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <RadioGroupItem value="notContains" id="notContains-endDay" />
+                                                            <Label htmlFor="notContains-endDay">Does Not Contain</Label>
                                                         </div>
                                                     </RadioGroup>
-                                                    <Select value={filterValue} onValueChange={setFilterValue}>
-                                                        <SelectTrigger>
-                                                            <SelectValue placeholder="Select value" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="Upcoming">Upcoming</SelectItem>
-                                                            <SelectItem value="In Progress">In Progress</SelectItem>
-                                                            <SelectItem value="Completed">Completed</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
+                                                    <Input
+                                                        placeholder="Filter value..."
+                                                        value={filterValue}
+                                                        onChange={(e) => setFilterValue(e.target.value)}
+                                                    />
                                                     <div className="flex justify-between">
                                                         <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
                                                             Cancel
                                                         </Button>
                                                         <Button
                                                             onClick={() => {
-                                                                applyFilter("status", filterType, filterValue)
+                                                                applyFilter("endDay", filterType, filterValue)
                                                                 setFilterValue("")
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700"
@@ -1071,6 +1384,8 @@ export default function PerformancePage() {
                                             </button>
                                         </TableCell>
                                     )}
+                                    {visibleColumns.includes("dealType") && <TableCell>{performance.dealType}</TableCell>}
+                                    {visibleColumns.includes("division") && <TableCell>{performance.division}</TableCell>}
                                     {visibleColumns.includes("startDate") && (
                                         <TableCell>
                                             <div className="flex items-center">
@@ -1087,42 +1402,24 @@ export default function PerformancePage() {
                                             </div>
                                         </TableCell>
                                     )}
-                                    {visibleColumns.includes("targetValue") && (
+                                    {/* {visibleColumns.includes("startDate2") && (
                                         <TableCell>
                                             <div className="flex items-center">
-                                                <TrendingUp className="h-4 w-4 text-gray-400 mr-1" />
-                                                {formatCurrency(performance.targetValue)}
+                                                <Calendar className="h-4 w-4 text-gray-400 mr-1" />
+                                                {performance.startDate2}
                                             </div>
                                         </TableCell>
                                     )}
-                                    {visibleColumns.includes("actualValue") && (
+                                    {visibleColumns.includes("endDate2") && (
                                         <TableCell>
-                                            {performance.actualValue > 0 ? (
-                                                <div className="flex items-center">
-                                                    <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-                                                    {formatCurrency(performance.actualValue)}
-                                                </div>
-                                            ) : (
-                                                <span className="text-gray-400">-</span>
-                                            )}
+                                            <div className="flex items-center">
+                                                <Calendar className="h-4 w-4 text-gray-400 mr-1" />
+                                                {performance.endDate2}
+                                            </div>
                                         </TableCell>
-                                    )}
-                                    {visibleColumns.includes("status") && (
-                                        <TableCell>
-                                            <Badge
-                                                variant="outline"
-                                                className={
-                                                    performance.status === "Completed"
-                                                        ? "bg-green-50 text-green-700 border-green-200"
-                                                        : performance.status === "In Progress"
-                                                            ? "bg-blue-50 text-blue-700 border-blue-200"
-                                                            : "bg-amber-50 text-amber-700 border-amber-200"
-                                                }
-                                            >
-                                                {performance.status}
-                                            </Badge>
-                                        </TableCell>
-                                    )}
+                                    )} */}
+                                    {visibleColumns.includes("startDay") && <TableCell>{performance.startDay}</TableCell>}
+                                    {visibleColumns.includes("endDay") && <TableCell>{performance.endDay}</TableCell>}
                                     {visibleColumns.includes("isActive") && (
                                         <TableCell>
                                             <Badge
@@ -1159,7 +1456,7 @@ export default function PerformancePage() {
                             <TableRow>
                                 <TableCell colSpan={visibleColumns.length + 2} className="text-center py-8">
                                     <div className="flex flex-col items-center justify-center text-gray-500">
-                                        <BarChart className="h-12 w-12 mb-2 text-gray-300" />
+                                        <Calendar className="h-12 w-12 mb-2 text-gray-300" />
                                         <h3 className="text-lg font-medium">No performances found</h3>
                                         <p className="text-sm">Try adjusting your search or filter criteria.</p>
                                     </div>
@@ -1248,6 +1545,28 @@ export default function PerformancePage() {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="dealType" className="text-right">
+                                Deal Type
+                            </Label>
+                            <Input
+                                id="dealType"
+                                value={newPerformance.dealType}
+                                onChange={(e) => setNewPerformance({ ...newPerformance, dealType: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="division" className="text-right">
+                                Division
+                            </Label>
+                            <Input
+                                id="division"
+                                value={newPerformance.division}
+                                onChange={(e) => setNewPerformance({ ...newPerformance, division: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="startDate" className="text-right">
                                 Start Date
                             </Label>
@@ -1271,35 +1590,51 @@ export default function PerformancePage() {
                                 className="col-span-3"
                             />
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="targetValue" className="text-right">
-                                Target Value
+                        {/* <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="startDate2" className="text-right">
+                                Start Date 2
                             </Label>
                             <Input
-                                id="targetValue"
-                                type="number"
-                                value={newPerformance.targetValue}
-                                onChange={(e) => setNewPerformance({ ...newPerformance, targetValue: e.target.value })}
+                                id="startDate2"
+                                type="date"
+                                value={newPerformance.startDate2}
+                                onChange={(e) => setNewPerformance({ ...newPerformance, startDate2: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="status" className="text-right">
-                                Status
+                            <Label htmlFor="endDate2" className="text-right">
+                                End Date 2
                             </Label>
-                            <Select
-                                value={newPerformance.status}
-                                onValueChange={(value) => setNewPerformance({ ...newPerformance, status: value })}
-                            >
-                                <SelectTrigger className="col-span-3">
-                                    <SelectValue placeholder="Select status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="Upcoming">Upcoming</SelectItem>
-                                    <SelectItem value="In Progress">In Progress</SelectItem>
-                                    <SelectItem value="Completed">Completed</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <Input
+                                id="endDate2"
+                                type="date"
+                                value={newPerformance.endDate2}
+                                onChange={(e) => setNewPerformance({ ...newPerformance, endDate2: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div> */}
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="startDay" className="text-right">
+                                Start Day
+                            </Label>
+                            <Input
+                                id="startDay"
+                                value={newPerformance.startDay}
+                                onChange={(e) => setNewPerformance({ ...newPerformance, startDay: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="endDay" className="text-right">
+                                End Day
+                            </Label>
+                            <Input
+                                id="endDay"
+                                value={newPerformance.endDay}
+                                onChange={(e) => setNewPerformance({ ...newPerformance, endDay: e.target.value })}
+                                className="col-span-3"
+                            />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <div className="text-right">Status</div>
@@ -1344,6 +1679,28 @@ export default function PerformancePage() {
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editDealType" className="text-right">
+                                Deal Type
+                            </Label>
+                            <Input
+                                id="editDealType"
+                                value={editPerformance.dealType}
+                                onChange={(e) => setEditPerformance({ ...editPerformance, dealType: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editDivision" className="text-right">
+                                Division
+                            </Label>
+                            <Input
+                                id="editDivision"
+                                value={editPerformance.division}
+                                onChange={(e) => setEditPerformance({ ...editPerformance, division: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="editStartDate" className="text-right">
                                 Start Date
                             </Label>
@@ -1367,47 +1724,51 @@ export default function PerformancePage() {
                                 className="col-span-3"
                             />
                         </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editTargetValue" className="text-right">
-                                Target Value
+                        {/* <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editStartDate2" className="text-right">
+                                Start Date 2
                             </Label>
                             <Input
-                                id="editTargetValue"
-                                type="number"
-                                value={editPerformance.targetValue}
-                                onChange={(e) => setEditPerformance({ ...editPerformance, targetValue: e.target.value })}
+                                id="editStartDate2"
+                                type="date"
+                                value={editPerformance.startDate2}
+                                onChange={(e) => setEditPerformance({ ...editPerformance, startDate2: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editActualValue" className="text-right">
-                                Actual Value
+                            <Label htmlFor="editEndDate2" className="text-right">
+                                End Date 2
                             </Label>
                             <Input
-                                id="editActualValue"
-                                type="number"
-                                value={editPerformance.actualValue}
-                                onChange={(e) => setEditPerformance({ ...editPerformance, actualValue: e.target.value })}
+                                id="editEndDate2"
+                                type="date"
+                                value={editPerformance.endDate2}
+                                onChange={(e) => setEditPerformance({ ...editPerformance, endDate2: e.target.value })}
+                                className="col-span-3"
+                            />
+                        </div> */}
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="editStartDay" className="text-right">
+                                Start Day
+                            </Label>
+                            <Input
+                                id="editStartDay"
+                                value={editPerformance.startDay}
+                                onChange={(e) => setEditPerformance({ ...editPerformance, startDay: e.target.value })}
                                 className="col-span-3"
                             />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="editStatus" className="text-right">
-                                Status
+                            <Label htmlFor="editEndDay" className="text-right">
+                                End Day
                             </Label>
-                            <Select
-                                value={editPerformance.status}
-                                onValueChange={(value) => setEditPerformance({ ...editPerformance, status: value })}
-                            >
-                                <SelectTrigger className="col-span-3">
-                                    <SelectValue placeholder="Select status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="Upcoming">Upcoming</SelectItem>
-                                    <SelectItem value="In Progress">In Progress</SelectItem>
-                                    <SelectItem value="Completed">Completed</SelectItem>
-                                </SelectContent>
-                            </Select>
+                            <Input
+                                id="editEndDay"
+                                value={editPerformance.endDay}
+                                onChange={(e) => setEditPerformance({ ...editPerformance, endDay: e.target.value })}
+                                className="col-span-3"
+                            />
                         </div>
                         <div className="grid grid-cols-4 items-center gap-4">
                             <div className="text-right">Status</div>

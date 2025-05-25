@@ -11,6 +11,7 @@ import {
     BarChart3,
     FileText,
     Layers,
+    Map
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -29,6 +30,7 @@ export default function ApplicationAdministrationLayout() {
         if (pathname.includes("/performance")) return "performance"
         if (pathname.includes("/deal-type")) return "deal-type"
         if (pathname.includes("/volume-tier-setups")) return "volume-tier-setups"
+        if (pathname.includes("/territories")) return "territories"
         return "dashboard"
     }
 
@@ -48,6 +50,7 @@ export default function ApplicationAdministrationLayout() {
         { title: "Performance", id: "performance", icon: BarChart, path: "/administration/application/performance" },
         { title: "Deal Type", id: "deal-type", icon: FileText, path: "/administration/application/deal-type" },
         { title: "Volume Tier Setups", id: "volume-tier-setups", icon: Layers, path: "/administration/application/volume-tier-setups" },
+        { title: "Territories", id: "territories", icon: Map, path: "/administration/application/territories" },
     ]
 
     if (!isAuthenticated()) return null

@@ -20,6 +20,7 @@ import DivisionSetupPage from './components/Administration/Application/DivisonSe
 import PerformancePage from './components/Administration/Application/Performance';
 import DealTypePage from './components/Administration/Application/DealType';
 import VolumeTierSetupsPage from './components/Administration/Application/VolumeTyreSetups';
+import TerritoriesPage from './components/Administration/Application/territories/territories';
 
 function App() {
   const location = useLocation();
@@ -53,6 +54,7 @@ function App() {
           <Route path="performance" element={<PerformancePage />} />
           <Route path="deal-type" element={<DealTypePage />} />
           <Route path="volume-tier-setups" element={<VolumeTierSetupsPage />} />
+          <Route path="territories" element={<TerritoriesPage />} />
         </Route>
       </Routes>
 
