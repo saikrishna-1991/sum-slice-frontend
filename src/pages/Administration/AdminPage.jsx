@@ -43,7 +43,7 @@ export default function AdministrationPage() {
             title: "Functional Administrator",
             icon: Cloud,
             color: "text-green-500",
-            href: "/administration/functional",
+            href: "/administration/functional/lookup",
         },
         {
             title: "Integration Administrator",

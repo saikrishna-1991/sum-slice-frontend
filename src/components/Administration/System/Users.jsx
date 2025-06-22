@@ -139,13 +139,15 @@ const userData = [
     },
 ];
 
-// Define all available columns
+// Updated columns definition including password and role_use_type
 const allColumns = [
     { id: "user_name", name: "Username", defaultVisible: true },
+    // { id: "password", name: "Password", defaultVisible: true }, // Changed to true for visibility
     { id: "first_name", name: "First Name", defaultVisible: true },
     { id: "last_name", name: "Last Name", defaultVisible: true },
     { id: "email", name: "Email", defaultVisible: true },
     { id: "role_type", name: "Role Type", defaultVisible: true },
+    { id: "role_use_type", name: "Role Use Type", defaultVisible: true },
     { id: "active", name: "Active", defaultVisible: true },
     { id: "activation_date", name: "Activation Date", defaultVisible: false },
     { id: "phone", name: "Phone", defaultVisible: false },
@@ -170,8 +172,8 @@ export default function UsersPage() {
     const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false)
     const [isColumnSettingsOpen, setIsColumnSettingsOpen] = useState(false)
     const [visibleColumns, setVisibleColumns] = useState(
-        allColumns.filter((col) => col.defaultVisible).map((col) => col.id),
-    )
+        allColumns.filter((col) => col.defaultVisible).map((col) => col.id)
+    );
     const [isLoading, setIsLoading] = useState(false)
     const [sortColumn, setSortColumn] = useState(null)
     const [sortDirection, setSortDirection] = useState("asc")
@@ -271,7 +273,7 @@ export default function UsersPage() {
     }
 
     const resetColumnVisibility = () => {
-        setVisibleColumns(allColumns.filter((col) => col.defaultVisible).map((col) => col.id))
+        setVisibleColumns(allColumns.map((col) => col.id))
     }
 
     const handleSort = (column) => {
@@ -374,8 +376,8 @@ export default function UsersPage() {
 
     // Get initials from full name
     const getInitials = (firstName, lastName) => {
-        return `${firstName[0] || ""}${lastName[0] || ""}`;
-    };
+        return `${firstName[0] || ""}${lastName[0] || ""}`
+    }
 
     // Get random color for avatar
     const getAvatarColor = (id) => {
@@ -417,7 +419,6 @@ export default function UsersPage() {
                         <Button
                             variant="outline"
                             onClick={handleAddUser}
-
                             className="transition-all duration-300 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200"
                         >
                             <Plus className="h-4 w-4 mr-2" />
@@ -599,6 +600,94 @@ export default function UsersPage() {
                                                             <Button
                                                                 onClick={() => {
                                                                     applyFilter("user_name", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("password") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("password")}
+                                        >
+                                            Password
+                                            {sortColumn === "password" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "password"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("password");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.password ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Password</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-password" />
+                                                                <Label htmlFor="equals-password">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-password" />
+                                                                <Label htmlFor="notEquals-password">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-password" />
+                                                                <Label htmlFor="beginsWith-password">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-password" />
+                                                                <Label htmlFor="endsWith-password">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-password" />
+                                                                <Label htmlFor="contains-password">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-password" />
+                                                                <Label htmlFor="notContains-password">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("password", filterType, filterValue);
                                                                     setFilterValue("");
                                                                 }}
                                                                 className="bg-green-700 hover:bg-green-800"
@@ -951,6 +1040,94 @@ export default function UsersPage() {
                                                             <Button
                                                                 onClick={() => {
                                                                     applyFilter("role_type", filterType, filterValue);
+                                                                    setFilterValue("");
+                                                                }}
+                                                                className="bg-green-700 hover:bg-green-800"
+                                                            >
+                                                                Apply Filter
+                                                            </Button>
+                                                        </div>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                    </TableHead>
+                                )}
+                                {visibleColumns.includes("role_use_type") && (
+                                    <TableHead>
+                                        <div
+                                            className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
+                                            onClick={() => handleSort("role_use_type")}
+                                        >
+                                            Role Use Type
+                                            {sortColumn === "role_use_type" &&
+                                                (sortDirection === "asc" ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                ))}
+                                            <Popover
+                                                open={activeFilterColumn === "role_use_type"}
+                                                onOpenChange={(open) => !open && setActiveFilterColumn(null)}
+                                            >
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="h-6 w-6 p-0 ml-1"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveFilterColumn("role_use_type");
+                                                        }}
+                                                    >
+                                                        <Filter className={`h-3 w-3 ${columnFilters.role_use_type ? "text-green-600" : ""}`} />
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-80">
+                                                    <div className="space-y-4">
+                                                        <h4 className="font-medium">Filter Role Use Type</h4>
+                                                        <RadioGroup
+                                                            defaultValue={filterType}
+                                                            onValueChange={setFilterType}
+                                                            className="grid grid-cols-2 gap-2"
+                                                        >
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="equals" id="equals-role_use_type" />
+                                                                <Label htmlFor="equals-role_use_type">Equals</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notEquals" id="notEquals-role_use_type" />
+                                                                <Label htmlFor="notEquals-role_use_type">Does Not Equal</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="beginsWith" id="beginsWith-role_use_type" />
+                                                                <Label htmlFor="beginsWith-role_use_type">Begins With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="endsWith" id="endsWith-role_use_type" />
+                                                                <Label htmlFor="endsWith-role_use_type">Ends With</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="contains" id="contains-role_use_type" />
+                                                                <Label htmlFor="contains-role_use_type">Contains</Label>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <RadioGroupItem value="notContains" id="notContains-role_use_type" />
+                                                                <Label htmlFor="notContains-role_use_type">Does Not Contain</Label>
+                                                            </div>
+                                                        </RadioGroup>
+                                                        <Input
+                                                            placeholder="Filter value..."
+                                                            value={filterValue}
+                                                            onChange={(e) => setFilterValue(e.target.value)}
+                                                        />
+                                                        <div className="flex justify-between">
+                                                            <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
+                                                                Cancel
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    applyFilter("role_use_type", filterType, filterValue);
                                                                     setFilterValue("");
                                                                 }}
                                                                 className="bg-green-700 hover:bg-green-800"
@@ -1593,6 +1770,7 @@ export default function UsersPage() {
                                                 </button>
                                             </TableCell>
                                         )}
+                                        {visibleColumns.includes("password") && <TableCell>{user.password}</TableCell>}
                                         {visibleColumns.includes("first_name") && (
                                             <TableCell>
                                                 <div className="flex items-center gap-2">
@@ -1625,81 +1803,13 @@ export default function UsersPage() {
                                                 </Badge>
                                             </TableCell>
                                         )}
+                                        {visibleColumns.includes("role_use_type") && (
+                                            <TableCell>
+                                                <Badge variant="outline">{user.role_use_type}</Badge>
+                                            </TableCell>
+                                        )}
                                         {visibleColumns.includes("active") && (
-                                            <TableHead>
-                                                <div
-                                                    className="flex items-center gap-1 cursor-pointer hover:text-green-600 transition-colors"
-                                                    onClick={() => handleSort("active")}
-                                                >
-                                                    Active
-                                                    {sortColumn === "active" &&
-                                                        (sortDirection === "asc" ? (
-                                                            <ChevronUp className="h-4 w-4" />
-                                                        ) : (
-                                                            <ChevronDown className="h-4 w-4" />
-                                                        ))}
-                                                    <Popover
-                                                        open={activeFilterColumn === "active"}
-                                                        onOpenChange={(open) => !open && setActiveFilterColumn(null)}
-                                                    >
-                                                        <PopoverTrigger asChild>
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                className="h-6 w-6 p-0 ml-1"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    setActiveFilterColumn("active");
-                                                                }}
-                                                            >
-                                                                <Filter className={`h-3 w-3 ${columnFilters.active ? "text-green-600" : ""}`} />
-                                                            </Button>
-                                                        </PopoverTrigger>
-                                                        <PopoverContent className="w-80">
-                                                            <div className="space-y-4">
-                                                                <h4 className="font-medium">Filter Active</h4>
-                                                                <RadioGroup
-                                                                    defaultValue={filterType}
-                                                                    onValueChange={setFilterType}
-                                                                    className="grid grid-cols-2 gap-2"
-                                                                >
-                                                                    <div className="flex items-center space-x-2">
-                                                                        <RadioGroupItem value="equals" id="equals-active" />
-                                                                        <Label htmlFor="equals-active">Equals</Label>
-                                                                    </div>
-                                                                    <div className="flex items-center space-x-2">
-                                                                        <RadioGroupItem value="notEquals" id="notEquals-active" />
-                                                                        <Label htmlFor="notEquals-active">Does Not Equal</Label>
-                                                                    </div>
-                                                                </RadioGroup>
-                                                                <Select value={filterValue} onValueChange={setFilterValue}>
-                                                                    <SelectTrigger>
-                                                                        <SelectValue placeholder="Select value" />
-                                                                    </SelectTrigger>
-                                                                    <SelectContent>
-                                                                        <SelectItem value="true">Active</SelectItem>
-                                                                        <SelectItem value="false">Inactive</SelectItem>
-                                                                    </SelectContent>
-                                                                </Select>
-                                                                <div className="flex justify-between">
-                                                                    <Button variant="outline" onClick={() => setActiveFilterColumn(null)}>
-                                                                        Cancel
-                                                                    </Button>
-                                                                    <Button
-                                                                        onClick={() => {
-                                                                            applyFilter("active", filterType, filterValue);
-                                                                            setFilterValue("");
-                                                                        }}
-                                                                        className="bg-green-700 hover:bg-green-800"
-                                                                    >
-                                                                        Apply Filter
-                                                                    </Button>
-                                                                </div>
-                                                            </div>
-                                                        </PopoverContent>
-                                                    </Popover>
-                                                </div>
-                                            </TableHead>
+                                            <TableCell>{user.active ? "Active" : "Inactive"}</TableCell>
                                         )}
                                         {visibleColumns.includes("activation_date") && <TableCell>{user.activation_date}</TableCell>}
                                         {visibleColumns.includes("phone") && <TableCell>{user.phone}</TableCell>}
@@ -1717,10 +1827,22 @@ export default function UsersPage() {
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                    <DropdownMenuItem onClick={() => handleUserClick(user)}>View profile</DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => handleUserClick(user, true)}>Edit user</DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => handleUserClick(user, false)}>
+                                                        View Profile
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => handleUserClick(user, true)}>
+                                                        Edit User
+                                                    </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem className="text-red-600">Delete user</DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() => {
+                                                            setSelectedUsers([user.id]);
+                                                            setIsDeleteDialogOpen(true);
+                                                        }}
+                                                        className="text-red-600"
+                                                    >
+                                                        Delete
+                                                    </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
                                         </TableCell>
@@ -1728,12 +1850,8 @@ export default function UsersPage() {
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={visibleColumns.length + 2} className="text-center py-8">
-                                        <div className="flex flex-col items-center justify-center text-gray-500">
-                                            <Users className="h-12 w-12 mb-2 text-gray-300" />
-                                            <h3 className="text-lg font-medium">No users found</h3>
-                                            <p className="text-sm">Try adjusting your search or filter criteria.</p>
-                                        </div>
+                                    <TableCell colSpan={visibleColumns.length + 2} className="h-24 text-center">
+                                        No users found.
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -1742,77 +1860,64 @@ export default function UsersPage() {
                 </div>
 
                 {/* Pagination */}
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-4">
+                <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-500">
+                        Showing {filteredUsers.length} of {userData.length} users
+                    </div>
                     <div className="flex items-center gap-2">
-                        <span>Show</span>
-                        <Select defaultValue="10">
-                            <SelectTrigger className="w-20">
-                                <SelectValue />
+                        <Select value={currentPage} onValueChange={setCurrentPage}>
+                            <SelectTrigger className="w-[70px]">
+                                <SelectValue placeholder="Page" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="10">10</SelectItem>
-                                <SelectItem value="25">25</SelectItem>
-                                <SelectItem value="50">50</SelectItem>
-                                <SelectItem value="100">100</SelectItem>
+                                <SelectItem value="1">1</SelectItem>
+                                {/* Add more pages if needed based on data */}
                             </SelectContent>
                         </Select>
-                        <span>per page</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <span>Page</span>
-                        <Input
-                            className="w-16"
-                            value={currentPage}
-                            onChange={(e) => {
-                                const value = e.target.value
-                                if (/^\d*$/.test(value)) {
-                                    setCurrentPage(value)
-                                }
-                            }}
-                        />
-                        <span>of {Math.max(1, Math.ceil(filteredUsers.length / 10))}</span>
-                        <span>
-                            Displaying {filteredUsers.length > 0 ? `1 - ${Math.min(filteredUsers.length, 10)}` : "0"} of{" "}
-                            {filteredUsers.length}
-                        </span>
+                        <span className="text-sm text-gray-500">of 1</span>
                     </div>
                 </div>
-            </>
 
-            {/* Delete Confirmation Dialog */}
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Confirm Deletion</DialogTitle>
-                        <DialogDescription>
-                            Are you sure you want to delete {selectedUsers.length} user(s)? This action cannot be undone.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button variant="destructive" onClick={handleDeleteUsers}>
-                            Delete
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog >
+                {/* Delete Confirmation Dialog */}
+                <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Confirm Deletion</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to delete {selectedUsers.length} user(s)? This action cannot be undone.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="destructive"
+                                onClick={handleDeleteUsers}
+                                className="bg-red-600 hover:bg-red-700"
+                            >
+                                Delete
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
-            {/* User Profile Dialog */}
-            {
-                selectedUser && (
+                {/* User Profile Dialog */}
+                {selectedUser && (
                     <UserProfileDialog
-                        user={selectedUser}
                         open={isUserProfileOpen}
                         onOpenChange={setIsUserProfileOpen}
-                        isEditing={isEditMode}
+                        user={selectedUser}
+                        isEditMode={isEditMode}
                     />
-                )
-            }
+                )}
 
-            {/* Add User Dialog */}
-            <AddUserDialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen} />
-        </div >
-    )
+                {/* Add User Dialog */}
+                <AddUserDialog
+                    open={isAddUserDialogOpen}
+                    onOpenChange={setIsAddUserDialogOpen}
+                />
+            </>
+        </div>
+    );
 }

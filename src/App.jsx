@@ -21,6 +21,15 @@ import PerformancePage from './components/Administration/Application/Performance
 import DealTypePage from './components/Administration/Application/DealType';
 import VolumeTierSetupsPage from './components/Administration/Application/VolumeTyreSetups';
 import TerritoriesPage from './components/Administration/Application/territories/territories';
+import SystemFunctionalLayout from './components/Administration/Functional/Layout';
+import LookupPage from './components/Administration/Functional/lookup';
+import StringRepositoryPage from './components/Administration/Functional/string-repository';
+import ApprovalRulePage from './components/Administration/Functional/approval-rule';
+import NotificationsPage from './components/Administration/Functional/notifications';
+import ServicesPage from './components/Administration/Functional/services';
+import ExtensionPage from './components/Administration/Functional/extension';
+import CustomFunctionsPage from './components/Administration/Functional/custom-functions';
+import SectionsPage from './components/Administration/Functional/sections';
 
 function App() {
   const location = useLocation();
@@ -55,6 +64,17 @@ function App() {
           <Route path="deal-type" element={<DealTypePage />} />
           <Route path="volume-tier-setups" element={<VolumeTierSetupsPage />} />
           <Route path="territories" element={<TerritoriesPage />} />
+        </Route>
+        <Route path="/administration/functional" element={<SystemFunctionalLayout />}>
+          {/* <Route index element={<SystemAdministratorPage />} /> */}
+          <Route path="lookup" element={<LookupPage />} />
+          <Route path="string-repository" element={<StringRepositoryPage />} />
+          <Route path="approval-rule" element={<ApprovalRulePage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="services" element={<ServicesPage />} />
+          <Route path="extension" element={<ExtensionPage />} />
+          <Route path="custom-functions" element={<CustomFunctionsPage />} />
+          <Route path="sections" element={<SectionsPage />} />
         </Route>
       </Routes>
 

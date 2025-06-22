@@ -18,14 +18,16 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
     const [profileImage, setProfileImage] = useState(null)
     const [imagePreview, setImagePreview] = useState(null)
 
-    // Initialize formData with the flat userData structure, mapping fields appropriately
+    // Initialize formData with all requested fields
     const [formData, setFormData] = useState({
         id: user?.id || "",
         user_name: user?.user_name || "",
+        password: user?.password || "", // Password field included
         first_name: user?.first_name || "",
         last_name: user?.last_name || "",
         email: user?.email || "",
         role_type: user?.role_type || "",
+        role_use_type: user?.role_use_type || "", // New field for role_use_type
         active: user?.active || false,
         phone: user?.phone || "",
         activation_date: user?.activation_date || "",
@@ -52,10 +54,12 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
             setFormData({
                 id: user?.id || "",
                 user_name: user?.user_name || "",
+                password: user?.password || "",
                 first_name: user?.first_name || "",
                 last_name: user?.last_name || "",
                 email: user?.email || "",
                 role_type: user?.role_type || "",
+                role_use_type: user?.role_use_type || "",
                 active: user?.active || false,
                 phone: user?.phone || "",
                 activation_date: user?.activation_date || "",
@@ -118,11 +122,11 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
     }
 
     // Render form fields or read-only data
-    const renderField = (label, value, name, type = "text") => {
+    const renderField = (label, value, name, type = "text", readOnly = false) => {
         return (
             <div className="space-y-1">
                 <label className="text-sm text-gray-500">{label}</label>
-                {isEditing ? (
+                {isEditing && !readOnly ? (
                     <Input
                         type={type}
                         name={name}
@@ -444,6 +448,27 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                     </div>
 
                                     <div className="flex items-center">
+                                        <span className="text-sm font-medium w-32">Role Use Type</span>
+                                        {isEditing ? (
+                                            <Select
+                                                value={formData.role_use_type}
+                                                onValueChange={(value) => handleSelectChange("role_use_type", value)}
+                                            >
+                                                <SelectTrigger className="w-[180px] h-8 min-h-[24px]">
+                                                    <SelectValue placeholder="Select role use type" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="Primary">Primary</SelectItem>
+                                                    <SelectItem value="Secondary">Secondary</SelectItem>
+                                                    <SelectItem value="Guest">Guest</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        ) : (
+                                            <Badge variant="outline">{formData.role_use_type || "-"}</Badge>
+                                        )}
+                                    </div>
+
+                                    <div className="flex items-center">
                                         <span className="text-sm font-medium w-32">Status</span>
                                         {isEditing ? (
                                             <Select
@@ -476,12 +501,14 @@ export function UserProfileDialog({ user, open, onOpenChange, isEditMode }) {
                                     <h3 className="text-lg font-medium mb-4">Account Information</h3>
                                     <div className="grid grid-cols-2 gap-4">
                                         {renderField("Username", formData.user_name, "user_name")}
+                                        {renderField("Password", isEditing ? formData.password : "••••••••", "password", "password")}
                                         {renderField("Role Type", formData.role_type, "role_type")}
-                                        {renderField("Activation Date", formData.activation_date, "activation_date", "date")}
-                                        {renderField("Creation Date", formData.creation_date, "creation_date")}
-                                        {renderField("Created By", formData.created_by, "created_by")}
-                                        {renderField("Last Updated By", formData.last_updated_by, "last_updated_by")}
-                                        {renderField("Last Update Date", formData.last_update_date, "last_update_date")}
+                                        {renderField("Role Use Type", formData.role_use_type, "role_use_type")}
+                                        {renderField("Activation Date", formData.activation_date, "activation_date", "date", true)}
+                                        {renderField("Creation Date", formData.creation_date, "creation_date", "date", true)}
+                                        {renderField("Created By", formData.created_by, "created_by", "text", true)}
+                                        {renderField("Last Updated By", formData.last_updated_by, "last_updated_by", "text", true)}
+                                        {renderField("Last Update Date", formData.last_update_date, "last_update_date", "date", true)}
                                     </div>
                                 </div>
                             </div>
